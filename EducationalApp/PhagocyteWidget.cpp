@@ -1,8 +1,22 @@
+/***
+ * Alex Tokita, Andrew Hokanson, Austin Li, Jonah Thomas, and Lucas Zagal
+ * CS3505 - A8 Educational App
+ * 18 April 2023
+ *
+ * This class holds the methods for a functioning Phagocyte
+ *
+ * Code Style Review by: Austin
+ */
+
 #include "PhagocyteWidget.h"
 #include <QPainter>
 #include <QDebug>
 #include <QRect>
 
+/**
+ * @brief PhagocyteWidget::PhagocyteWidget Constructor
+ * @param parent
+ */
 PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     world(b2Vec2(0.0f, 10.0f)),
     timer(this),
@@ -55,7 +69,11 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     timer.start(10);
 }
 
-void PhagocyteWidget::paintEvent(QPaintEvent *) {
+/**
+ * @brief PhagocyteWidget::paintEvent Re-validates properties
+ */
+void PhagocyteWidget::paintEvent(QPaintEvent *)
+{
     // Create a painter
     QPainter painter(this);
     b2Vec2 position = body->GetPosition();
@@ -67,10 +85,44 @@ void PhagocyteWidget::paintEvent(QPaintEvent *) {
     painter.drawImage(QRect(10, 10, 30, 30), image);
 //    qDebug() << image;
     painter.end();
-   }
+}
 
-void PhagocyteWidget::updateWorld() {
+/**
+ * @brief PhagocyteWidget::updateWorld
+ */
+void PhagocyteWidget::updateWorld()
+{
     // It is generally best to keep the time step and iterations fixed.
     world.Step(1.0/60.0, 6, 2);
     update();
 }
+
+// Movement methods
+/**
+ * @brief PhagocyteWidget::moveForward Applies a standardized force vector in the direction this Phagocyte is facing
+ */
+void PhagocyteWidget::moveForward()
+{
+
+}
+
+/**
+ * @brief PhagocyteWidget::moveBackward Applies a standardized force vector in the opposite direction this Phagocyte is facing
+ */
+void PhagocyteWidget::moveBackward()
+{
+    // TODO: Really no clue if this works lol
+    //body->ApplyForceToCenter(b2Vec2());
+}
+
+/**
+ * @brief PhagocyteWidget::rotate Rotates this Phagocyte in the specified direction
+ * @param dir A negative or positive integer that indicates left or right respectively
+ */
+void PhagocyteWidget::rotate(int dir)
+{
+    // TODO: Really no clue if this works lol
+    body->ApplyTorque(dir*10, true);
+}
+
+

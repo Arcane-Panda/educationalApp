@@ -1,3 +1,13 @@
+/***
+ * Alex Tokita, Andrew Hokanson, Austin Li, Jonah Thomas, and Lucas Zagal
+ * CS3505 - A8 Educational App
+ * 18 April 2023
+ *
+ * This class holds the methods
+ *
+ * Code Style Review by:
+ */
+
 #include "mainwindow.h"
 #include <QApplication>
 
