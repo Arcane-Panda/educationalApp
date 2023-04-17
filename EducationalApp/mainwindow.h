@@ -10,6 +10,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QEvent>
+#include "PhagocyteWidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,11 +23,17 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr, PhagocyteWidget *phagocyte = nullptr);
     ~MainWindow();
+
+signals:
+    void keyDown(Qt::Key);
+    void keyUp(Qt::Key);
 
 private:
     Ui::MainWindow *ui;
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 };
 
 #endif // MAINWINDOW_H

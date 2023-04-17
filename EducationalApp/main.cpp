@@ -14,7 +14,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+    PhagocyteWidget phagocyte;
+    MainWindow w(nullptr, &phagocyte);
     w.show();
     return a.exec();
 }

@@ -23,15 +23,20 @@ signals:
 
 public slots:
     void updateWorld();
-    void moveForward();
-    void moveBackward();
-    void rotate(int dir);
+    void keyDown(Qt::Key);
+    void keyUp(Qt::Key);
 
 private:
     b2World world;
     b2Body* body;
     QTimer timer;
     QImage image;
+    bool wKeyDown;
+    bool aKeyDown;
+    bool sKeyDown;
+    bool dKeyDown;
+    int speed;
+    int rotateSpeed;
 };
 
 #endif // PHAGOCYTEWIDGET_H

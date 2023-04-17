@@ -10,8 +10,9 @@
 
 #include "mainwindow.h"
 #include "ui_MainWindow.h"
+#include <QKeyEvent>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent, PhagocyteWidget* phagocyte)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -19,6 +20,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->show();
     ui->Phagocyte->show();
     ui->stackedWidget->setCurrentIndex(2);
+
+    // Setup player movement connections
+    connect(this, &MainWindow::keyDown, phagocyte, &PhagocyteWidget::keyDown);
+    connect(this, &MainWindow::keyUp, phagocyte, &PhagocyteWidget::keyUp);
 }
 
 MainWindow::~MainWindow()
@@ -26,4 +31,40 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key())
+    {
+        case Qt::Key_W:
+            emit keyDown(Qt::Key_W);
+            break;
+        case Qt::Key_A:
+            emit keyDown(Qt::Key_A);
+            break;
+        case Qt::Key_S:
+            emit keyDown(Qt::Key_S);
+            break;
+        case Qt::Key_D:
+            emit keyDown(Qt::Key_D);
+            break;
+    }
+}
 
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    switch (event->key())
+    {
+        case Qt::Key_W:
+            emit keyUp(Qt::Key_W);
+            break;
+        case Qt::Key_A:
+            emit keyUp(Qt::Key_A);
+            break;
+        case Qt::Key_S:
+            emit keyUp(Qt::Key_S);
+            break;
+        case Qt::Key_D:
+            emit keyUp(Qt::Key_D);
+            break;
+    }
+}
