@@ -23,7 +23,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, PhagocyteWidget *phagocyte = nullptr);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 signals:

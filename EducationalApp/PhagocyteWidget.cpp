@@ -68,8 +68,9 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     body->CreateFixture(&fixtureDef);
 
     // Player Movement Initialization
-    speed = 50;
+    speed = 500;
     rotateSpeed = 25.0f;
+    angle = 0.0f;
     wKeyDown = false;
     aKeyDown = false;
     sKeyDown = false;
@@ -78,7 +79,7 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     printf("Init world\n");
 
     connect(&timer, &QTimer::timeout, this, &PhagocyteWidget::updateWorld);
-    timer.start(10);
+    timer.start(17);
 }
 
 /**
@@ -89,17 +90,19 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
     // Create a painter
     QPainter painter(this);
     b2Vec2 position = body->GetPosition();
-    float angle = body->GetAngle();
 
     //printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
 
     // TODO how to draw image at rotation?
+    QImage rotatedImg = image.transformed(QTransform().rotate(angle));
     QPoint globalCursorPos = QCursor::pos();
     painter.drawImage(QRect(globalCursorPos.x() - 25, globalCursorPos.y() - 45, 50, 50), image);
-    painter.drawImage(QRect((int)(position.x), (int)(position.y), 50, 50), image);
+    painter.drawImage(QRect((int)(position.x), (int)(position.y), 50, 50), rotatedImg);
     //painter.drawImage(QRect(10, 10, 30, 30), image);
 //    qDebug() << image;
     painter.end();
+
+    //cout << "painted" << endl;
 }
 
 /**
@@ -139,10 +142,29 @@ void PhagocyteWidget::updateWorld()
     body->SetAngularVelocity(rotateSpeed * dir);
     */
 
-    QPoint globalCursorPos = QCursor::pos();
-    b2Vec2 toMouse(globalCursorPos.x(), globalCursorPos.y());
-    toMouse -= (b2Vec2(body->GetPosition().x + 25, body->GetPosition().y + 45));
-    body->ApplyForceToCenter(toMouse, true);
+    if(aKeyDown)
+    {
+        angle -= 2;
+    }
+    else if(dKeyDown)
+    {
+        angle += 2;
+    }
+    angle = fmod(angle, 360.0f);
+
+    if(wKeyDown)
+    {
+        b2Vec2 forceVec = b2Vec2(speed * cos(angle * M_PI/180), speed * sin(angle * M_PI/180));
+        body->ApplyForceToCenter(forceVec, true);
+//        cout << "applied force vector  " << forceVec.x << ", " << forceVec.y << " (angle: " << angle << ")" << endl;
+//        cout << "pos: " << body->GetPosition().x << ", " << body->GetPosition().y << endl;
+    }
+
+    //    QPoint globalCursorPos = QCursor::pos();
+    //    b2Vec2 toMouse(globalCursorPos.x(), globalCursorPos.y());
+    //    toMouse -= body->GetPosition();
+    //    body->ApplyForceToCenter(toMouse, true);
+    //    cout << "applied force vector  " << toMouse.x << ", " << toMouse.y << endl;
 
     // It is generally best to keep the time step and iterations fixed.
     world.Step(1.0/60.0, 6, 2);

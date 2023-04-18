@@ -37,6 +37,7 @@ private:
     bool dKeyDown;
     int speed;
     int rotateSpeed;
+    double angle;
 };
 
 #endif // PHAGOCYTEWIDGET_H

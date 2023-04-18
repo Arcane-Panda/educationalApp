@@ -12,7 +12,7 @@
 #include "ui_MainWindow.h"
 #include <QKeyEvent>
 
-MainWindow::MainWindow(QWidget *parent, PhagocyteWidget* phagocyte)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -22,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent, PhagocyteWidget* phagocyte)
     ui->stackedWidget->setCurrentIndex(2);
 
     // Setup player movement connections
-    connect(this, &MainWindow::keyDown, phagocyte, &PhagocyteWidget::keyDown);
-    connect(this, &MainWindow::keyUp, phagocyte, &PhagocyteWidget::keyUp);
+    connect(this, &MainWindow::keyDown, ui->Phagocyte, &PhagocyteWidget::keyDown);
+    connect(this, &MainWindow::keyUp, ui->Phagocyte, &PhagocyteWidget::keyUp);
 }
 
 MainWindow::~MainWindow()
