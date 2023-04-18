@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->stackedWidget->show();
     ui->Phagocyte->show();
-    ui->stackedWidget->setCurrentIndex(2);
+    ui->stackedWidget->setCurrentIndex(3);
 
     // Setup player movement connections
     connect(this, &MainWindow::keyDown, ui->Phagocyte, &PhagocyteWidget::keyDown);
