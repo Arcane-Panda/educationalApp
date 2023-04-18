@@ -62,14 +62,14 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     fixtureDef.density = 1.0f;
 
     // Override the default friction.
-    fixtureDef.friction = 0.3f;
+    fixtureDef.friction = 50.0f;
     fixtureDef.restitution = 0.9;
     // Add the shape to the body.
     body->CreateFixture(&fixtureDef);
 
     // Player Movement Initialization
     speed = 50;
-    rotateSpeed = 4;
+    rotateSpeed = 25.0f;
     wKeyDown = false;
     aKeyDown = false;
     sKeyDown = false;
@@ -93,8 +93,11 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
 
     //printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
 
-    painter.drawImage(QRect((int)(position.x), (int)(position.y), 30, 30), image);
-    painter.drawImage(QRect(10, 10, 30, 30), image);
+    // TODO how to draw image at rotation?
+    QPoint globalCursorPos = QCursor::pos();
+    painter.drawImage(QRect(globalCursorPos.x() - 25, globalCursorPos.y() - 45, 50, 50), image);
+    painter.drawImage(QRect((int)(position.x), (int)(position.y), 50, 50), image);
+    //painter.drawImage(QRect(10, 10, 30, 30), image);
 //    qDebug() << image;
     painter.end();
 }
@@ -105,33 +108,41 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
 void PhagocyteWidget::updateWorld()
 {
     // User Input Deciphering
+    /*
     //b2Vec2 force = b2Vec2(0,0);
-    b2Vec2 force = b2Vec2(speed * cos((body->GetAngle() * M_PI) / 180), speed * sin((body->GetAngle() * M_PI) / 180));
+    b2Vec2 force = b2Vec2(speed * cos((body->GetAngle() * M_PI) / 180), -speed * sin((body->GetAngle() * M_PI) / 180));
     int dir = 0;
 
     // Forward Backward Movement first
-    if (wKeyDown && !sKeyDown)
+    if (wKeyDown)
     {
-        force = b2Vec2(speed * cos((body->GetAngle() * M_PI) / 180), speed * sin((body->GetAngle() * M_PI) / 180));
-        cout << force.x << " " << force.y << endl;
+        force = b2Vec2(body->GetMass() * speed * cos((body->GetAngle() * M_PI) / 180), body->GetMass() * speed * sin((body->GetAngle() * M_PI) / 180));
         cout << body->GetAngle() << endl;
+        cout << force.x << " " << force.y << endl;
     }
-    else if (sKeyDown && !wKeyDown)
+    else if (sKeyDown)
     {
-        force = b2Vec2(-speed * cos((body->GetAngle() * M_PI) / 180), -speed * sin((body->GetAngle() * M_PI) / 180));
+        force = b2Vec2(body->GetMass() * -speed * cos((body->GetAngle() * M_PI) / 180), body->GetMass() * -speed * sin((body->GetAngle() * M_PI) / 180));
+        cout << aKeyDown << endl;
     }
     body->ApplyForceToCenter(force, true);
 
     // Secondly Left Right Rotation
-    if (aKeyDown && !dKeyDown)
+    if (aKeyDown)
     {
         dir = 1;
     }
-    else if (dKeyDown && !aKeyDown)
+    else if (dKeyDown)
     {
         dir = -1;
     }
-    body->ApplyTorque(dir * rotateSpeed, true);
+    body->SetAngularVelocity(rotateSpeed * dir);
+    */
+
+    QPoint globalCursorPos = QCursor::pos();
+    b2Vec2 toMouse(globalCursorPos.x(), globalCursorPos.y());
+    toMouse -= (b2Vec2(body->GetPosition().x + 25, body->GetPosition().y + 45));
+    body->ApplyForceToCenter(toMouse, true);
 
     // It is generally best to keep the time step and iterations fixed.
     world.Step(1.0/60.0, 6, 2);
