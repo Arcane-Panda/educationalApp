@@ -56,8 +56,11 @@ SOURCES += \
     Box2D/Dynamics/b2WorldCallbacks.cpp \
     Box2D/Rope/b2Rope.cpp \
     PhagocyteWidget.cpp \
+    gamecontroller.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mazephagocyte.cpp \
+    patterngamecontroller.cpp
 
 HEADERS += \
     Box2D/Box2D.h \
@@ -108,7 +111,10 @@ HEADERS += \
     Box2D/Dynamics/b2WorldCallbacks.h \
     Box2D/Rope/b2Rope.h \
     PhagocyteWidget.h \
-    mainwindow.h
+    gamecontroller.h \
+    mainwindow.h \
+    mazephagocyte.h \
+    patterngamecontroller.h
 
 FORMS += \
     mainwindow.ui

@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
-    <height>850</height>
+    <width>1876</width>
+    <height>970</height>
    </rect>
   </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
+    <horstretch>1</horstretch>
+    <verstretch>1</verstretch>
    </sizepolicy>
   </property>
   <property name="windowTitle">
@@ -27,24 +27,30 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="0" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
-      <widget class="QWidget" name="StartScreen">
-       <layout class="QGridLayout" name="gridLayout_2"/>
-      </widget>
-      <widget class="QWidget" name="Level1">
-       <layout class="QGridLayout" name="gridLayout_3"/>
-      </widget>
-      <widget class="QWidget" name="Level2">
-       <layout class="QGridLayout" name="gridLayout_4"/>
-      </widget>
+      <widget class="QWidget" name="StartScreen"/>
+      <widget class="QWidget" name="Level1"/>
+      <widget class="QWidget" name="Level2"/>
       <widget class="QWidget" name="Level3">
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <widget class="PhagocyteWidget" name="Phagocyte" native="true"/>
-        </item>
-       </layout>
+       <widget class="PhagocyteWidget" name="Phagocyte" native="true">
+        <property name="geometry">
+         <rect>
+          <x>9</x>
+          <y>9</y>
+          <width>1861</width>
+          <height>911</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QPushButton" name="NextLevelButton">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
      </widget>
     </item>
    </layout>
@@ -54,7 +60,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1600</width>
+     <width>1876</width>
      <height>22</height>
     </rect>
    </property>
