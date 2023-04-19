@@ -18,7 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->stackedWidget->show();
+    ui->stackedWidget->setWindowState(Qt::WindowMaximized);
     ui->Phagocyte->show();
+    ui->Phagocyte->setWindowState(Qt::WindowMaximized);
     ui->stackedWidget->setCurrentIndex(3);
 
     // Setup player movement connections
