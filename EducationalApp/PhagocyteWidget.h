@@ -12,6 +12,15 @@
 #include <QWidget>
 #include <Box2D/Box2D.h>
 #include <QTimer>
+#include <tuple>
+#include <vector>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QFile>
+
+using std::tuple;
+using std::vector;
 
 class PhagocyteWidget : public QWidget
 {
@@ -30,6 +39,7 @@ public slots:
 private:
     b2World world;
     b2Body* body;
+    vector<tuple<int,int,int,int>> maze;
     QTimer timer;
     QImage image;
     bool wKeyDown;

@@ -92,6 +92,26 @@ void PhagocyteWidget::setupMaze()
     b2PolygonShape groundBox;
     groundBox.SetAsBox(500.0f, 50.0f);
     groundBody->CreateFixture(&groundBox, 0.0f);
+
+    maze.push_back(tuple<int,int,int,int>(750,0,1500,25));
+    QJsonArray jsonMaze;
+    QJsonArray wall;
+    QJsonObject mazeObj;
+    wall.append(750);
+    wall.append(0);
+    wall.append(1500);
+    wall.append(25);
+    jsonMaze.append(wall);
+
+    mazeObj["maze"] = jsonMaze;
+
+    QJsonDocument mazeDoc(mazeObj);
+    QFile mazeFile("maze.json");
+    if(mazeFile.open(QIODevice::WriteOnly))
+    {
+        mazeFile.write(mazeDoc.toJson());
+        mazeFile.close();
+    }
 }
 
 /**
@@ -100,7 +120,7 @@ void PhagocyteWidget::setupMaze()
 void PhagocyteWidget::paintEvent(QPaintEvent *)
 {
     // Create a painter
-    cout << body->GetPosition().x << " " << body->GetPosition().y << endl;
+    //cout << body->GetPosition().x << " " << body->GetPosition().y << endl;
 
     QPainter painter(this);
     b2Vec2 position = body->GetPosition();
