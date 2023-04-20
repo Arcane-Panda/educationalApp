@@ -208,6 +208,11 @@ void PhagocyteWidget::updateWorld()
 //        cout << "applied force vector  " << forceVec.x << ", " << forceVec.y << " (angle: " << angle << ")" << endl;
 //        cout << "pos: " << body->GetPosition().x << ", " << body->GetPosition().y << endl;
     }
+    else if(sKeyDown)
+    {
+        b2Vec2 forceVec = b2Vec2(-speed * cos(angle * M_PI/180), -speed * sin(angle * M_PI/180));
+        body->ApplyForceToCenter(forceVec, true);
+    }
 
     //    QPoint globalCursorPos = QCursor::pos();
     //    b2Vec2 toMouse(globalCursorPos.x(), globalCursorPos.y());
