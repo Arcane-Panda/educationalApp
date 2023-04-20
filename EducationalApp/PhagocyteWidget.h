@@ -39,7 +39,7 @@ public slots:
 private:
     b2World world;
     b2Body* body;
-    vector<tuple<int,int,int,int>> maze;
+    vector<QRect> walls;
     QTimer timer;
     QImage image;
     bool wKeyDown;

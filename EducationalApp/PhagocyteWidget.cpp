@@ -46,7 +46,7 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     // Define the dynamic body. We set its position and call the body factory.
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(0.0f, 0.0f);
+    bodyDef.position.Set(700.0f, 400.0f);
 
     body = world.CreateBody(&bodyDef);
 
@@ -84,33 +84,50 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
 
 void PhagocyteWidget::setupMaze()
 {
-    // Border Walls
+//    maze.push_back(tuple<int,int,int,int>(750,0,1500,25));
+//    QJsonArray jsonMaze;
+//    QJsonArray wall;
+//    QJsonObject mazeObj;
+//    wall.append(750);
+//    wall.append(0);
+//    wall.append(1500);
+//    wall.append(25);
+//    jsonMaze.append(wall);
 
-    b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(50.0f, 60.0f);
-    b2Body* groundBody = world.CreateBody(&groundBodyDef);
-    b2PolygonShape groundBox;
-    groundBox.SetAsBox(500.0f, 50.0f);
-    groundBody->CreateFixture(&groundBox, 0.0f);
+//    mazeObj["maze"] = jsonMaze;
 
-    maze.push_back(tuple<int,int,int,int>(750,0,1500,25));
-    QJsonArray jsonMaze;
-    QJsonArray wall;
-    QJsonObject mazeObj;
-    wall.append(750);
-    wall.append(0);
-    wall.append(1500);
-    wall.append(25);
-    jsonMaze.append(wall);
+//    QJsonDocument mazeDoc(mazeObj);
+//    QFile mazeFile("maze.json");
+//    if(mazeFile.open(QIODevice::WriteOnly))
+//    {
+//        mazeFile.write(mazeDoc.toJson());
+//        mazeFile.close();
+//    }
 
-    mazeObj["maze"] = jsonMaze;
-
-    QJsonDocument mazeDoc(mazeObj);
-    QFile mazeFile("maze.json");
-    if(mazeFile.open(QIODevice::WriteOnly))
+    QPainter painter(this);
+    QFile mazeFile(QString("/Users/jonahthomas/Qt/a8-edu-app-Gfniblib/EducationalApp/maze.json"));
+    if(mazeFile.open(QIODevice::ReadOnly))
     {
-        mazeFile.write(mazeDoc.toJson());
-        mazeFile.close();
+        QByteArray wallData = mazeFile.readAll();
+        QJsonDocument mazeDoc = QJsonDocument::fromJson(wallData);
+        QJsonArray walls = mazeDoc["maze"].toArray();
+
+        for(const QJsonValue &wall : walls)
+        {
+            int x = wall.toArray()[0].toInt();
+            int y = wall.toArray()[1].toInt();
+            int w = wall.toArray()[2].toInt();
+            int h = wall.toArray()[3].toInt();
+
+            b2BodyDef groundBodyDef;
+            groundBodyDef.position.Set(x, y);
+            b2Body* groundBody = world.CreateBody(&groundBodyDef);
+            b2PolygonShape groundBox;
+            groundBox.SetAsBox(w, h);
+            groundBody->CreateFixture(&groundBox, 0.0f);
+
+            this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
+        }
     }
 }
 
@@ -128,6 +145,10 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
     QImage rotatedImg = image.transformed(QTransform().rotate(angle));
     float width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
     painter.drawImage(QRect((int)(position.x) - width / 2, (int)(position.y) - width / 2, width, width), rotatedImg);
+    for(QRect wall: walls)
+    {
+        painter.fillRect(wall, QBrush(Qt::black));
+    }
     painter.end();
 }
 
