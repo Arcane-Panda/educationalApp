@@ -41,14 +41,14 @@ private:
     b2Body* body;
     vector<QRect> walls;
     QTimer timer;
-    QImage phagocyteImg;
+    QImage phagocyteImg[3];
     QImage visionImg;
     bool wKeyDown;
     bool aKeyDown;
     bool sKeyDown;
     bool dKeyDown;
     int speed;
-    int rotateSpeed;
+    int animationCounter;
     double angle;
 
 };

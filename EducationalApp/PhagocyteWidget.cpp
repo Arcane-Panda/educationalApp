@@ -23,27 +23,8 @@ using std::endl;
 PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     world(b2Vec2(0.0f, 0.0f)),
     timer(this),
-    phagocyteImg(":/resource/phagocyte.png"),
     visionImg(":/resource/vision.png")
 {
-    // Define the ground body.
-    //b2BodyDef groundBodyDef;
-    //groundBodyDef.position.Set(0.0f, 20.0f);
-
-    // Call the body factory which allocates memory for the ground body
-    // from a pool and creates the ground box shape (also from a pool).
-    // The body is also added to the world.
-    //b2Body* groundBody = world.CreateBody(&groundBodyDef);
-
-    // Define the ground box shape.
-    //b2PolygonShape groundBox;
-
-    // The extents are the half-widths of the box.
-    //groundBox.SetAsBox(50.0f, 10.0f);
-
-    // Add the ground fixture to the ground body.
-    //groundBody->CreateFixture(&groundBox, 0.0f);
-
     // Define the dynamic body. We set its position and call the body factory.
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -70,12 +51,15 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
 
     // Player Movement Initialization
     speed = 500;
-    rotateSpeed = 25.0f;
     angle = 0.0f;
     wKeyDown = false;
     aKeyDown = false;
     sKeyDown = false;
     dKeyDown = false;
+
+    phagocyteImg[0] = QImage(":/resource/Phagocyte1.png");
+    phagocyteImg[1] = QImage(":/resource/Phagocyte2.png");
+    phagocyteImg[2] = QImage(":/resource/Phagocyte3.png");
 
     printf("Init world\n");
 
@@ -85,26 +69,6 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
 
 void PhagocyteWidget::setupMaze()
 {
-//    maze.push_back(tuple<int,int,int,int>(750,0,1500,25));
-//    QJsonArray jsonMaze;
-//    QJsonArray wall;
-//    QJsonObject mazeObj;
-//    wall.append(750);
-//    wall.append(0);
-//    wall.append(1500);
-//    wall.append(25);
-//    jsonMaze.append(wall);
-
-//    mazeObj["maze"] = jsonMaze;
-
-//    QJsonDocument mazeDoc(mazeObj);
-//    QFile mazeFile("maze.json");
-//    if(mazeFile.open(QIODevice::WriteOnly))
-//    {
-//        mazeFile.write(mazeDoc.toJson());
-//        mazeFile.close();
-//    }
-
     QPainter painter(this);
     QFile mazeFile(QString(":/resource/maze.json"));
     if(mazeFile.open(QIODevice::ReadOnly))
@@ -137,20 +101,29 @@ void PhagocyteWidget::setupMaze()
  */
 void PhagocyteWidget::paintEvent(QPaintEvent *)
 {
+    animationCounter++;
+    int frameIndex = fmod(animationCounter, 40) / 10;
+    if (frameIndex == 2)
+    {
+        frameIndex = 0;
+    }
+    if (frameIndex == 3)
+    {
+        frameIndex = 2;
+    }
     // Create a painter
-    //cout << body->GetPosition().x << " " << body->GetPosition().y << endl;
 
     QPainter painter(this);
     b2Vec2 position = body->GetPosition();
 
-    QImage rotatedImg = phagocyteImg.transformed(QTransform().rotate(angle));
+    QImage rotatedImg = phagocyteImg[frameIndex].transformed(QTransform().rotate(angle));
     float width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
     painter.drawImage(QRect((int)(position.x) - width / 2, (int)(position.y) - width / 2, width, width), rotatedImg);
     for(QRect wall: walls)
     {
         painter.fillRect(wall, QBrush(Qt::black));
     }
-    //painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
+    painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
 }
 
@@ -160,36 +133,6 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
 void PhagocyteWidget::updateWorld()
 {
     // User Input Deciphering
-    /*
-    //b2Vec2 force = b2Vec2(0,0);
-    b2Vec2 force = b2Vec2(speed * cos((body->GetAngle() * M_PI) / 180), -speed * sin((body->GetAngle() * M_PI) / 180));
-    int dir = 0;
-
-    // Forward Backward Movement first
-    if (wKeyDown)
-    {
-        force = b2Vec2(body->GetMass() * speed * cos((body->GetAngle() * M_PI) / 180), body->GetMass() * speed * sin((body->GetAngle() * M_PI) / 180));
-        cout << body->GetAngle() << endl;
-        cout << force.x << " " << force.y << endl;
-    }
-    else if (sKeyDown)
-    {
-        force = b2Vec2(body->GetMass() * -speed * cos((body->GetAngle() * M_PI) / 180), body->GetMass() * -speed * sin((body->GetAngle() * M_PI) / 180));
-        cout << aKeyDown << endl;
-    }
-    body->ApplyForceToCenter(force, true);
-
-    // Secondly Left Right Rotation
-    if (aKeyDown)
-    {
-        dir = 1;
-    }
-    else if (dKeyDown)
-    {
-        dir = -1;
-    }
-    body->SetAngularVelocity(rotateSpeed * dir);
-    */
 
     if(aKeyDown)
     {
@@ -205,20 +148,12 @@ void PhagocyteWidget::updateWorld()
     {
         b2Vec2 forceVec = b2Vec2(speed * cos(angle * M_PI/180), speed * sin(angle * M_PI/180));
         body->ApplyForceToCenter(forceVec, true);
-//        cout << "applied force vector  " << forceVec.x << ", " << forceVec.y << " (angle: " << angle << ")" << endl;
-//        cout << "pos: " << body->GetPosition().x << ", " << body->GetPosition().y << endl;
     }
     else if(sKeyDown)
     {
         b2Vec2 forceVec = b2Vec2(-speed * cos(angle * M_PI/180), -speed * sin(angle * M_PI/180));
         body->ApplyForceToCenter(forceVec, true);
     }
-
-    //    QPoint globalCursorPos = QCursor::pos();
-    //    b2Vec2 toMouse(globalCursorPos.x(), globalCursorPos.y());
-    //    toMouse -= body->GetPosition();
-    //    body->ApplyForceToCenter(toMouse, true);
-    //    cout << "applied force vector  " << toMouse.x << ", " << toMouse.y << endl;
 
     // It is generally best to keep the time step and iterations fixed.
     world.Step(1.0/60.0, 6, 2);
