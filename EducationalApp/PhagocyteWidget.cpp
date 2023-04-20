@@ -52,15 +52,15 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     body = world.CreateBody(&bodyDef);
 
     // Define another box shape for our dynamic body.
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(1.0f, 1.0f);
+    b2CircleShape hitbox;
+    hitbox.m_radius = 25.0f;
 
     // Define the dynamic body fixture.
     b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;
+    fixtureDef.shape = &hitbox;
 
     // Set the box density to be non-zero, so it will be dynamic.
-    fixtureDef.density = 1.0f;
+    fixtureDef.density = 0.001f;
 
     // Override the default friction.
     fixtureDef.friction = 50.0f;
@@ -124,7 +124,7 @@ void PhagocyteWidget::setupMaze()
             groundBodyDef.position.Set(x, y);
             b2Body* groundBody = world.CreateBody(&groundBodyDef);
             b2PolygonShape groundBox;
-            groundBox.SetAsBox(w, h);
+            groundBox.SetAsBox(w/2, h/2);
             groundBody->CreateFixture(&groundBox, 0.0f);
 
             this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
@@ -150,7 +150,7 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
     {
         painter.fillRect(wall, QBrush(Qt::black));
     }
-    painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
+    //painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
 }
 
