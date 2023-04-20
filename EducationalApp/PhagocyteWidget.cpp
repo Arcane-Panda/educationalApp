@@ -24,7 +24,7 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     world(b2Vec2(0.0f, 0.0f)),
     timer(this),
     visionImg(":/resource/vision.png"),
-    backgroundBlood(":/resource/bloodvessels.jpg")
+    backgroundBlood(":/resource/bloodvessels.png")
 {
     // Define the dynamic body. We set its position and call the body factory.
     b2BodyDef bodyDef;
@@ -125,7 +125,7 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
     {
         painter.fillRect(wall, QBrush(Qt::yellow));
     }
-    //painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
+    painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
 }
 
