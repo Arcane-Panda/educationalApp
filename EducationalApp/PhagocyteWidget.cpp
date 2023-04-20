@@ -28,7 +28,7 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     // Define the dynamic body. We set its position and call the body factory.
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(700.0f, 400.0f);
+    bodyDef.position.Set(50.0f, 450.0f);
 
     body = world.CreateBody(&bodyDef);
 
