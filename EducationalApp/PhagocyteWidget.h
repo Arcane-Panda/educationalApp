@@ -43,6 +43,7 @@ private:
     QTimer timer;
     QImage phagocyteImg[3];
     QImage visionImg;
+    QImage backgroundBlood;
     bool wKeyDown;
     bool aKeyDown;
     bool sKeyDown;

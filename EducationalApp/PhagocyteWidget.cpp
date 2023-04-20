@@ -23,7 +23,8 @@ using std::endl;
 PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     world(b2Vec2(0.0f, 0.0f)),
     timer(this),
-    visionImg(":/resource/vision.png")
+    visionImg(":/resource/vision.png"),
+    backgroundBlood(":/resource/bloodvessels.jpg")
 {
     // Define the dynamic body. We set its position and call the body factory.
     b2BodyDef bodyDef;
@@ -116,14 +117,15 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
     QPainter painter(this);
     b2Vec2 position = body->GetPosition();
 
+    painter.drawImage(QRect(0, 0, 1400, 1400), backgroundBlood);
     QImage rotatedImg = phagocyteImg[frameIndex].transformed(QTransform().rotate(angle));
     float width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
     painter.drawImage(QRect((int)(position.x) - width / 2, (int)(position.y) - width / 2, width, width), rotatedImg);
     for(QRect wall: walls)
     {
-        painter.fillRect(wall, QBrush(Qt::black));
+        painter.fillRect(wall, QBrush(Qt::yellow));
     }
-    painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
+    //painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
 }
 
