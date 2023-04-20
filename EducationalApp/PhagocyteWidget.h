@@ -41,7 +41,8 @@ private:
     b2Body* body;
     vector<QRect> walls;
     QTimer timer;
-    QImage image;
+    QImage phagocyteImg;
+    QImage visionImg;
     bool wKeyDown;
     bool aKeyDown;
     bool sKeyDown;

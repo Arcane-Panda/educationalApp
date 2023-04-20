@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->Phagocyte->showMaximized();
-    ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(3);
 
     // TODO Remove this and add to when change to level 2
     ui->Phagocyte->setupMaze();
