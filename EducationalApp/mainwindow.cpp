@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->Phagocyte->showMaximized();
-    ui->stackedWidget->setWindowState(Qt::WindowMaximized);
-    ui->Phagocyte->setWindowState(Qt::WindowMaximized);
     ui->stackedWidget->setCurrentIndex(1);
 
     // TODO Remove this and add to when change to level 2
