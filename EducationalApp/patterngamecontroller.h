@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-class PatternGameController
+class PatternGameController : public QWidget
 {
     Q_OBJECT
 public:

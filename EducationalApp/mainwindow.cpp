@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->Phagocyte->setWindowState(Qt::WindowMaximized);
     ui->stackedWidget->setCurrentIndex(3);
 
+    // TODO Remove this and add to when change to level 2
+    ui->Phagocyte->setupMaze();
+
     // Setup player movement connections
     connect(this, &MainWindow::keyDown, ui->Phagocyte, &PhagocyteWidget::keyDown);
     connect(this, &MainWindow::keyUp, ui->Phagocyte, &PhagocyteWidget::keyUp);

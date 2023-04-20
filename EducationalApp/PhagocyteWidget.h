@@ -19,6 +19,7 @@ class PhagocyteWidget : public QWidget
 public:
     explicit PhagocyteWidget(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *);
+    void setupMaze();
 signals:
 
 public slots:
@@ -38,6 +39,7 @@ private:
     int speed;
     int rotateSpeed;
     double angle;
+
 };
 
 #endif // PHAGOCYTEWIDGET_H

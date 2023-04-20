@@ -63,7 +63,7 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
 
     // Override the default friction.
     fixtureDef.friction = 50.0f;
-    fixtureDef.restitution = 0.9;
+    fixtureDef.restitution = 0.2;
     // Add the shape to the body.
     body->CreateFixture(&fixtureDef);
 
@@ -82,27 +82,33 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     timer.start(17);
 }
 
+void PhagocyteWidget::setupMaze()
+{
+    // Border Walls
+
+    b2BodyDef groundBodyDef;
+    groundBodyDef.position.Set(50.0f, 60.0f);
+    b2Body* groundBody = world.CreateBody(&groundBodyDef);
+    b2PolygonShape groundBox;
+    groundBox.SetAsBox(500.0f, 50.0f);
+    groundBody->CreateFixture(&groundBox, 0.0f);
+}
+
 /**
  * @brief PhagocyteWidget::paintEvent Re-validates properties
  */
 void PhagocyteWidget::paintEvent(QPaintEvent *)
 {
     // Create a painter
+    cout << body->GetPosition().x << " " << body->GetPosition().y << endl;
+
     QPainter painter(this);
     b2Vec2 position = body->GetPosition();
 
-    //printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);
-
-    // TODO how to draw image at rotation?
     QImage rotatedImg = image.transformed(QTransform().rotate(angle));
-    QPoint globalCursorPos = QCursor::pos();
-    painter.drawImage(QRect(globalCursorPos.x() - 25, globalCursorPos.y() - 45, 50, 50), image);
-    painter.drawImage(QRect((int)(position.x), (int)(position.y), 50, 50), rotatedImg);
-    //painter.drawImage(QRect(10, 10, 30, 30), image);
-//    qDebug() << image;
+    float width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
+    painter.drawImage(QRect((int)(position.x) - width / 2, (int)(position.y) - width / 2, width, width), rotatedImg);
     painter.end();
-
-    //cout << "painted" << endl;
 }
 
 /**

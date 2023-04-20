@@ -59,7 +59,6 @@ SOURCES += \
     gamecontroller.cpp \
     main.cpp \
     mainwindow.cpp \
-    mazephagocyte.cpp \
     patterngamecontroller.cpp
 
 HEADERS += \
@@ -113,7 +112,6 @@ HEADERS += \
     PhagocyteWidget.h \
     gamecontroller.h \
     mainwindow.h \
-    mazephagocyte.h \
     patterngamecontroller.h
 
 FORMS += \
