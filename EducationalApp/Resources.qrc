@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/resource">
         <file>phagocyte.png</file>
+        <file>maze.json</file>
     </qresource>
 </RCC>

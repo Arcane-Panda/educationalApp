@@ -105,7 +105,7 @@ void PhagocyteWidget::setupMaze()
 //    }
 
     QPainter painter(this);
-    QFile mazeFile(QString("/Users/jonahthomas/Qt/a8-edu-app-Gfniblib/EducationalApp/maze.json"));
+    QFile mazeFile(QString(":/resource/maze.json"));
     if(mazeFile.open(QIODevice::ReadOnly))
     {
         QByteArray wallData = mazeFile.readAll();
