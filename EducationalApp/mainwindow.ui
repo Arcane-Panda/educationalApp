@@ -278,19 +278,19 @@
        </widget>
       </widget>
       <widget class="QWidget" name="Level2">
-       <widget class="QWidget" name="MazePhagocyte" native="true">
+       <widget class="PhagocyteWidget" name="MazePhagocyte" native="true">
         <property name="geometry">
          <rect>
-          <x>270</x>
-          <y>180</y>
-          <width>120</width>
-          <height>80</height>
+          <x>9</x>
+          <y>9</y>
+          <width>1376</width>
+          <height>777</height>
          </rect>
         </property>
        </widget>
       </widget>
       <widget class="QWidget" name="Level3">
-       <widget class="PhagocyteWidget" name="Phagocyte" native="true">
+       <widget class="PhagocyteWidget" name="Level3Phagocyte" native="true">
         <property name="geometry">
          <rect>
           <x>9</x>
@@ -311,7 +311,7 @@
      <x>0</x>
      <y>0</y>
      <width>1400</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

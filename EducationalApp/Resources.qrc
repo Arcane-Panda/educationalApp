@@ -6,5 +6,10 @@
         <file>Phagocyte2.png</file>
         <file>Phagocyte3.png</file>
         <file>bloodvessels.png</file>
+        <file>internalBloodVessel.png</file>
+        <file>Bacteria1.png</file>
+        <file>Bacteria2.png</file>
+        <file>Bacteria3.png</file>
+        <file>bacteria.json</file>
     </qresource>
 </RCC>

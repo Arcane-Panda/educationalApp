@@ -17,15 +17,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->Phagocyte->showMaximized();
-    ui->stackedWidget->setCurrentIndex(3);
+    ui->MazePhagocyte->showMaximized();
+    ui->stackedWidget->setCurrentIndex(2);
 
     // TODO Remove this and add to when change to level 2
-    ui->Phagocyte->setupMaze();
-
+    //ui->Level3Phagocyte->setupLevel3();
+    ui->MazePhagocyte->setupLevel2();
+   // ui->Level3Phagocyte->changeBackground(":/resource/internalBloodVessel.png");
     // Setup player movement connections
-    connect(this, &MainWindow::keyDown, ui->Phagocyte, &PhagocyteWidget::keyDown);
-    connect(this, &MainWindow::keyUp, ui->Phagocyte, &PhagocyteWidget::keyUp);
+    connect(this, &MainWindow::keyDown, ui->MazePhagocyte, &PhagocyteWidget::keyDown);
+    connect(this, &MainWindow::keyUp, ui->MazePhagocyte, &PhagocyteWidget::keyUp);
 }
 
 MainWindow::~MainWindow()

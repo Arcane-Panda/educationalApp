@@ -8,7 +8,7 @@
  * Code Style Review by: Austin
  */
 
-#include "PhagocyteWidget.h"
+#include "Level2Widget.h"
 #include <QPainter>
 #include <QDebug>
 #include <QRect>
@@ -62,23 +62,15 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     phagocyteImg[1] = QImage(":/resource/Phagocyte2.png");
     phagocyteImg[2] = QImage(":/resource/Phagocyte3.png");
 
-    bacteriaImg[0] = QImage(":/resource/Bacteria1.png");
-    bacteriaImg[1] = QImage(":/resource/Bacteria2.png");
-    bacteriaImg[2] = QImage(":/resource/Bacteria3.png");
-
     printf("Init world\n");
 
     connect(&timer, &QTimer::timeout, this, &PhagocyteWidget::updateWorld);
     timer.start(17);
 }
 
-void PhagocyteWidget::changeBackground(QString fileName)
+void PhagocyteWidget::setupMaze()
 {
-    backgroundBlood = QImage(fileName);
-}
-
-void PhagocyteWidget::setupLevel2()
-{
+    QPainter painter(this);
     QFile mazeFile(QString(":/resource/maze.json"));
     if(mazeFile.open(QIODevice::ReadOnly))
     {
@@ -93,66 +85,16 @@ void PhagocyteWidget::setupLevel2()
             int w = wall.toArray()[2].toInt();
             int h = wall.toArray()[3].toInt();
 
-            b2BodyDef wallBodyDef;
-            wallBodyDef.position.Set(x, y);
-            b2Body* wallBody = world.CreateBody(&wallBodyDef);
-            b2PolygonShape wallBox;
-            wallBox.SetAsBox(w/2, h/2);
-            wallBody->CreateFixture(&wallBox, 0.0f);
+            b2BodyDef groundBodyDef;
+            groundBodyDef.position.Set(x, y);
+            b2Body* groundBody = world.CreateBody(&groundBodyDef);
+            b2PolygonShape groundBox;
+            groundBox.SetAsBox(w/2, h/2);
+            groundBody->CreateFixture(&groundBox, 0.0f);
 
             this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
         }
     }
-}
-
-void PhagocyteWidget::setupLevel3()
-{
-    int borderWallInfo[4][4] {{700, 0, 1400, 10}, {0, 400,10, 800}, {700, 772, 1400, 10}, {1372, 400, 10, 800}};
-    for(int i = 0; i < 4; i++)
-    {
-        int x = borderWallInfo[i][0];
-
-            int y =  borderWallInfo[i][1];
-            int w =  borderWallInfo[i][2];
-            int h = borderWallInfo[i][3];
-
-            b2BodyDef wallBodyDef;
-        wallBodyDef.position.Set(x, y);
-        b2Body* wallBody = world.CreateBody(&wallBodyDef);
-        b2PolygonShape wallBox;
-        wallBox.SetAsBox(w/2, h/2);
-        wallBody->CreateFixture(&wallBox, 0.0f);
-        this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
-    }
-
-
-    QFile bacteriaFile(QString(":/resource/bacteria.json"));
-    if(bacteriaFile.open(QIODevice::ReadOnly))
-    {
-        std::cout << "opening bacteria file" << std::endl;
-        QByteArray bacteriaData = bacteriaFile.readAll();
-        QJsonDocument bacteriaDoc = QJsonDocument::fromJson(bacteriaData);
-        QJsonArray bacteriaArray = bacteriaDoc["bacteria"].toArray();
-
-        std::cout << bacteriaArray.size() << std::endl;
-        for(const QJsonValue &bacterium : bacteriaArray)
-        {
-            std::cout << "adding bacteria" << std::endl;
-            int x = bacterium.toArray()[0].toInt();
-            int y = bacterium.toArray()[1].toInt();
-
-            b2BodyDef wallBodyDef;
-            wallBodyDef.position.Set(x+32, y+32);
-            b2Body* wallBody = world.CreateBody(&wallBodyDef);
-            b2PolygonShape wallBox;
-            wallBox.SetAsBox(8, 8);
-            wallBody->CreateFixture(&wallBox, 0.0f);
-
-            this->bacteria.push_back(QPoint(x,y));
-        }
-    }
-
-
 }
 
 /**
@@ -170,35 +112,19 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
     {
         frameIndex = 2;
     }
-
     // Create a painter
+
     QPainter painter(this);
     b2Vec2 position = body->GetPosition();
 
     painter.drawImage(QRect(0, 0, 1400, 1400), backgroundBlood);
-    //Draw Phagocyte
     QImage rotatedImg = phagocyteImg[frameIndex].transformed(QTransform().rotate(angle));
     float width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
     painter.drawImage(QRect((int)(position.x) - width / 2, (int)(position.y) - width / 2, width, width), rotatedImg);
-
-    //Draw Bacteria
-    for(QPoint bacterium : bacteria)
-    {
-        std::cout << "drawing bacteria" << std::endl;
-        rotatedImg = bacteriaImg[frameIndex].transformed(QTransform().rotate(-45));
-        painter.drawImage(QRect((int)(bacterium.x()),  (int)(bacterium.y())  , 64, 64), rotatedImg);
-    }
-
-   // width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
-
-
     for(QRect wall: walls)
     {
         painter.fillRect(wall, QBrush(Qt::yellow));
     }
-
-    //fog of war
-    //put an if around this?
     painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
 }

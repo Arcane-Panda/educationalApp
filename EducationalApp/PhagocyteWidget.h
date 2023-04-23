@@ -28,7 +28,9 @@ class PhagocyteWidget : public QWidget
 public:
     explicit PhagocyteWidget(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *);
-    void setupMaze();
+    void setupLevel2();
+    void setupLevel3();
+    void changeBackground(QString fileName);
 signals:
 
 public slots:
@@ -40,8 +42,10 @@ private:
     b2World world;
     b2Body* body;
     vector<QRect> walls;
+    vector<QPoint> bacteria;
     QTimer timer;
     QImage phagocyteImg[3];
+    QImage bacteriaImg[3];
     QImage visionImg;
     QImage backgroundBlood;
     bool wKeyDown;
