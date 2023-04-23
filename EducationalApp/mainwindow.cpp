@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->MazePhagocyte->showMaximized();
-    ui->stackedWidget->setCurrentIndex(2);
+    ui->stackedWidget->setCurrentIndex(1);
 
     // TODO Remove this and add to when change to level 2
     //ui->Level3Phagocyte->setupLevel3();
@@ -31,6 +31,20 @@ MainWindow::MainWindow(QWidget *parent)
     // Setup player movement connections
     connect(this, &MainWindow::keyDown, ui->MazePhagocyte, &PhagocyteWidget::keyDown);
     connect(this, &MainWindow::keyUp, ui->MazePhagocyte, &PhagocyteWidget::keyUp);
+
+
+    //LEVEL 1 SETUP-------------
+    connect(ui->button1, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed1);
+    connect(ui->button2, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed2);
+    connect(ui->button3, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed3);
+    connect(ui->button4, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed4);
+    connect(ui->button5, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed5);
+    connect(ui->button6, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed6);
+    connect(ui->button7, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed7);
+    connect(ui->button8, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed8);
+    connect(ui->button9, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed9);
+
+    connect(ui->fireButton, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::checkPattern);
 }
 
 /**

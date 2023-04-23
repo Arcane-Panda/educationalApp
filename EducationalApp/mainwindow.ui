@@ -55,6 +55,9 @@
            <property name="text">
             <string>PushButton</string>
            </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="2" column="2">
@@ -67,6 +70,9 @@
            </property>
            <property name="text">
             <string>PushButton</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -86,6 +92,9 @@
            <property name="text">
             <string>PushButton</string>
            </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="2" column="0">
@@ -98,6 +107,9 @@
            </property>
            <property name="text">
             <string>PushButton</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -112,6 +124,9 @@
            <property name="text">
             <string>PushButton</string>
            </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="1" column="2">
@@ -124,6 +139,9 @@
            </property>
            <property name="text">
             <string>PushButton</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -138,6 +156,9 @@
            <property name="text">
             <string>PushButton</string>
            </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="2" column="1">
@@ -151,6 +172,9 @@
            <property name="text">
             <string>PushButton</string>
            </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
@@ -163,6 +187,9 @@
            </property>
            <property name="text">
             <string>PushButton</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -276,6 +303,16 @@
          <string>Example 3</string>
         </property>
        </widget>
+       <widget class="PatternGameController" name="PatternGameDisplay" native="true">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>50</y>
+          <width>661</width>
+          <height>671</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="Level2">
        <widget class="PhagocyteWidget" name="MazePhagocyte" native="true">
@@ -311,7 +348,7 @@
      <x>0</x>
      <y>0</y>
      <width>1400</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -322,6 +359,12 @@
    <class>PhagocyteWidget</class>
    <extends>QWidget</extends>
    <header>phagocytewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PatternGameController</class>
+   <extends>QWidget</extends>
+   <header location="global">patterngamecontroller.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
