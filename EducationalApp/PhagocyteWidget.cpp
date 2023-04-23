@@ -72,13 +72,21 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     timer.start(17);
 }
 
+/**
+ * @brief PhagocyteWidget::changeBackground Changes the background image of the window
+ * @param fileName The background image file
+ */
 void PhagocyteWidget::changeBackground(QString fileName)
 {
     backgroundBlood = QImage(fileName);
 }
 
+/**
+ * @brief PhagocyteWidget::setupLevel2 Adds level 2 game objects to the widget
+ */
 void PhagocyteWidget::setupLevel2()
 {
+    // Draw maze borders
     QFile mazeFile(QString(":/resource/maze.json"));
     if(mazeFile.open(QIODevice::ReadOnly))
     {
@@ -105,8 +113,12 @@ void PhagocyteWidget::setupLevel2()
     }
 }
 
+/**
+ * @brief PhagocyteWidget::setupLevel3 Adds level 3 game objects into the widget
+ */
 void PhagocyteWidget::setupLevel3()
 {
+    // Draw game borders
     int borderWallInfo[4][4] {{700, 0, 1400, 10}, {0, 400,10, 800}, {700, 772, 1400, 10}, {1372, 400, 10, 800}};
     for(int i = 0; i < 4; i++)
     {
@@ -125,7 +137,7 @@ void PhagocyteWidget::setupLevel3()
         this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
     }
 
-
+    // Draw bacteria from JSON file
     QFile bacteriaFile(QString(":/resource/bacteria.json"));
     if(bacteriaFile.open(QIODevice::ReadOnly))
     {
@@ -236,6 +248,10 @@ void PhagocyteWidget::updateWorld()
     update();
 }
 
+/**
+ * @brief PhagocyteWidget::keyDown Updates the widgets WASD key pressed states (pressed)
+ * @param key
+ */
 void PhagocyteWidget::keyDown(Qt::Key key)
 {
     switch (key)
@@ -257,6 +273,10 @@ void PhagocyteWidget::keyDown(Qt::Key key)
     }
 }
 
+/**
+ * @brief PhagocyteWidget::keyUp Updates the widgets WASD key pressed states (released)
+ * @param key
+ */
 void PhagocyteWidget::keyUp(Qt::Key key)
 {
     switch (key)

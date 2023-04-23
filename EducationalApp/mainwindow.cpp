@@ -12,6 +12,10 @@
 #include "ui_MainWindow.h"
 #include <QKeyEvent>
 
+/**
+ * @brief MainWindow::MainWindow Constructs the mainwindow and initializes game levels
+ * @param parent
+ */
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -29,11 +33,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::keyUp, ui->MazePhagocyte, &PhagocyteWidget::keyUp);
 }
 
+/**
+ * @brief MainWindow::~MainWindow Destructor
+ */
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+/**
+ * @brief MainWindow::keyPressEvent Emits a signal when WASD are pressed
+ * @param event Holds the information of which key was pressed
+ */
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key())
@@ -53,6 +64,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
+/**
+ * @brief MainWindow::keyReleaseEvent Emits a signal when WASD are released
+ * @param event Holds the information of which key was released
+ */
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     switch (event->key())
