@@ -5,6 +5,10 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent)
     greenPattern = {1, 2, 5, 6, 7, 8};
     pinkPattern = {3, 4, 5, 6, 7, 9};
     orangePattern = {4, 5, 8, 9};
+    greenImage = QImage(":/resource/GreenPattern.png");
+    orangeImage = QImage(":/resource/OrangePattern.png");
+    pinkImage = QImage(":/resource/PinkPattern.png");
+
 }
 
 

@@ -11,5 +11,8 @@
         <file>Bacteria2.png</file>
         <file>Bacteria3.png</file>
         <file>bacteria.json</file>
+        <file>GreenPattern.png</file>
+        <file>OrangePattern.png</file>
+        <file>PinkPattern.png</file>
     </qresource>
 </RCC>

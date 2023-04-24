@@ -40,6 +40,9 @@ private:
     set<int> greenPattern;
     set<int> pinkPattern;
     set<int> orangePattern;
+    QImage greenImage;
+    QImage pinkImage;
+    QImage orangeImage;
     bool compareSets(set<int>* , set<int>*);
 };
 
