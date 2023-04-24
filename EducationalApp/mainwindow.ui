@@ -207,7 +207,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="GreenPattern">
         <property name="geometry">
          <rect>
           <x>830</x>
@@ -258,7 +258,7 @@
          <string>Fire!</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="BacteriaDisplay">
         <property name="geometry">
          <rect>
           <x>50</x>
@@ -277,7 +277,7 @@
          <string>Display</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="OrangePattern">
         <property name="geometry">
          <rect>
           <x>1010</x>
@@ -296,7 +296,7 @@
          <string>Example 2</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="PinkPattern">
         <property name="geometry">
          <rect>
           <x>1190</x>

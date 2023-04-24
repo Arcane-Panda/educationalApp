@@ -48,7 +48,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->PatternGameDisplay, &PatternGameController::clearButtons, this, &MainWindow::clearButtons);
     connect(ui->PatternGameDisplay, &PatternGameController::flashSelectedButtons, this, &MainWindow::flashSelectedButtons);
 
-
+    // Level 1 UI
+    ui->GreenPattern->setPixmap(QPixmap(":/resource/GreenPattern.png").scaled(163,163,Qt::KeepAspectRatio));
+    ui->OrangePattern->setPixmap(QPixmap(":/resource/OrangePattern.png").scaled(163,163,Qt::KeepAspectRatio));
+    ui->PinkPattern->setPixmap(QPixmap(":/resource/PinkPattern.png").scaled(163,163,Qt::KeepAspectRatio));
     ui->button1->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
     ui->button2->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
     ui->button3->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
