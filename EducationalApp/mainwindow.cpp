@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->button9, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed9);
 
     connect(ui->fireButton, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::checkPattern);
+    connect(ui->PatternGameDisplay, &PatternGameController::clearButtons, this, &MainWindow::clearButtons);
 }
 
 /**
@@ -99,4 +100,18 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
             emit keyUp(Qt::Key_D);
             break;
     }
+}
+
+
+void MainWindow::clearButtons()
+{
+    ui->button1->setChecked(false);
+    ui->button2->setChecked(false);
+    ui->button3->setChecked(false);
+    ui->button4->setChecked(false);
+    ui->button5->setChecked(false);
+    ui->button6->setChecked(false);
+    ui->button7->setChecked(false);
+    ui->button8->setChecked(false);
+    ui->button9->setChecked(false);
 }

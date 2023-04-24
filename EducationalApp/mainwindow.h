@@ -30,6 +30,9 @@ signals:
     void keyDown(Qt::Key);
     void keyUp(Qt::Key);
 
+public slots:
+    void clearButtons();
+
 private:
     Ui::MainWindow *ui;
     void keyPressEvent(QKeyEvent *event);

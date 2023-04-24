@@ -3,14 +3,20 @@
 
 #include <set>
 #include <QWidget>
+#include <iostream>
 
 using std::set;
+using std::cout;
+using std::endl;
 
 class PatternGameController : public QWidget
 {
     Q_OBJECT
 public:
     explicit PatternGameController(QWidget *parent = nullptr);
+
+signals:
+    void clearButtons();
 
 
 public slots:
@@ -25,13 +31,14 @@ public slots:
     void buttonPushed9(bool);
 
     void checkPattern(bool);
+    void updateEntered(int, bool);
 
 
 private:
     set<int> entered;
-    set<int> greenPattern = {1, 2, 5, 6, 7, 8};
-    set<int> pinkPattern = {3, 4, 5, 6, 7, 9};
-    set<int> orangePattern = {4, 5, 8, 9};
+    set<int> greenPattern;
+    set<int> pinkPattern;
+    set<int> orangePattern;
     bool compareSets(set<int>* , set<int>*);
 };
 
