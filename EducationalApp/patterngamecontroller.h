@@ -4,6 +4,8 @@
 #include <set>
 #include <QWidget>
 #include <iostream>
+#include <Box2D/Box2D.h>
+#include <QTimer>
 
 using std::set;
 using std::cout;
@@ -14,6 +16,7 @@ class PatternGameController : public QWidget
     Q_OBJECT
 public:
     explicit PatternGameController(QWidget *parent = nullptr);
+    void paintEvent(QPaintEvent *);
 
 signals:
     void clearButtons();
@@ -21,6 +24,7 @@ signals:
 
 
 public slots:
+    void updateWorld();
     void buttonPushed1(bool);
     void buttonPushed2(bool);
     void buttonPushed3(bool);
@@ -36,6 +40,9 @@ public slots:
 
 
 private:
+    b2Body* protein;
+    b2Body* bacteria;
+    b2World world;
     set<int> entered;
     set<int> greenPattern;
     set<int> pinkPattern;
@@ -43,6 +50,8 @@ private:
     QImage greenImage;
     QImage pinkImage;
     QImage orangeImage;
+    QTimer timer;
+    void createProteins(int color);
     bool compareSets(set<int>* , set<int>*);
 };
 
