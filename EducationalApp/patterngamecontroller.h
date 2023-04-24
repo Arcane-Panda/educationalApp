@@ -17,6 +17,7 @@ public:
 
 signals:
     void clearButtons();
+    void flashSelectedButtons(QString);
 
 
 public slots:

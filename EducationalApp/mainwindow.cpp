@@ -46,6 +46,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->fireButton, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::checkPattern);
     connect(ui->PatternGameDisplay, &PatternGameController::clearButtons, this, &MainWindow::clearButtons);
+    connect(ui->PatternGameDisplay, &PatternGameController::flashSelectedButtons, this, &MainWindow::flashSelectedButtons);
+
+
+    ui->button1->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button2->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button3->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button4->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button5->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button6->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button7->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button8->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button9->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+
 }
 
 /**
@@ -115,3 +128,41 @@ void MainWindow::clearButtons()
     ui->button8->setChecked(false);
     ui->button9->setChecked(false);
 }
+
+void MainWindow::flashSelectedButtons(QString color)
+{
+    if(ui->button1->isChecked())
+       ui->button1->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+    if(ui->button2->isChecked())
+       ui->button2->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+    if(ui->button3->isChecked())
+       ui->button3->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+    if(ui->button4->isChecked())
+       ui->button4->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+    if(ui->button5->isChecked())
+       ui->button5->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+    if(ui->button6->isChecked())
+       ui->button6->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+    if(ui->button7->isChecked())
+       ui->button7->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+    if(ui->button8->isChecked())
+       ui->button8->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+    if(ui->button9->isChecked())
+       ui->button9->setStyleSheet( QString("QPushButton {background-color: " + color + "; border: none;}"));
+
+     QTimer::singleShot(500, this, &MainWindow::unflashSelectedButtons);
+}
+
+void MainWindow::unflashSelectedButtons()
+{
+    ui->button1->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button2->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button3->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button4->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button5->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button6->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button7->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button8->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+    ui->button9->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
+}
+

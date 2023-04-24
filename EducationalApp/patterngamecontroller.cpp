@@ -22,14 +22,17 @@ void PatternGameController::checkPattern(bool pushed)
     //Check to see if the entered pattern matches any of the correct patterns
     if(compareSets(&entered, &greenPattern))
     {
+        emit flashSelectedButtons(QString("rgb(23,186,62)"));
         cout << "Matches green!" << endl;
     }
     else if(compareSets(&entered, &pinkPattern))
     {
+        emit flashSelectedButtons(QString("rgb(254,170,202)"));
         cout << "Matches pink!" << endl;
     }
     else if (compareSets(&entered, &orangePattern))
     {
+        emit flashSelectedButtons(QString("rgb(218,164,2)"));
         cout << "Matches orange!" << endl;
     }
     else

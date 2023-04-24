@@ -32,6 +32,8 @@ signals:
 
 public slots:
     void clearButtons();
+    void flashSelectedButtons(QString);
+    void unflashSelectedButtons();
 
 private:
     Ui::MainWindow *ui;
