@@ -58,16 +58,16 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     sKeyDown = false;
     dKeyDown = false;
 
+    // Load in the animation sequence for Phagocyte
     phagocyteImg[0] = QImage(":/resource/Phagocyte1.png");
     phagocyteImg[1] = QImage(":/resource/Phagocyte2.png");
     phagocyteImg[2] = QImage(":/resource/Phagocyte3.png");
-
+    // Load in the animation sequence for Bacteria
     bacteriaImg[0] = QImage(":/resource/Bacteria1.png");
     bacteriaImg[1] = QImage(":/resource/Bacteria2.png");
     bacteriaImg[2] = QImage(":/resource/Bacteria3.png");
 
-    printf("Init world\n");
-
+    // Timer
     connect(&timer, &QTimer::timeout, this, &PhagocyteWidget::updateWorld);
     timer.start(17);
 }
@@ -90,10 +90,11 @@ void PhagocyteWidget::setupLevel2()
     QFile mazeFile(QString(":/resource/maze.json"));
     if(mazeFile.open(QIODevice::ReadOnly))
     {
+        // Read from mazeFile
         QByteArray wallData = mazeFile.readAll();
         QJsonDocument mazeDoc = QJsonDocument::fromJson(wallData);
         QJsonArray walls = mazeDoc["maze"].toArray();
-
+        // Add in wall colliders for maze and add dimensions for drawing
         for(const QJsonValue &wall : walls)
         {
             int x = wall.toArray()[0].toInt();
@@ -118,22 +119,22 @@ void PhagocyteWidget::setupLevel2()
  */
 void PhagocyteWidget::setupLevel3()
 {
-    // Draw game borders
+    // Define game boundaries
     int borderWallInfo[4][4] {{700, 0, 1400, 10}, {0, 400,10, 800}, {700, 772, 1400, 10}, {1372, 400, 10, 800}};
     for(int i = 0; i < 4; i++)
     {
         int x = borderWallInfo[i][0];
+        int y = borderWallInfo[i][1];
+        int w = borderWallInfo[i][2];
+        int h = borderWallInfo[i][3];
 
-            int y = borderWallInfo[i][1];
-            int w = borderWallInfo[i][2];
-            int h = borderWallInfo[i][3];
-
-            b2BodyDef wallBodyDef;
+        b2BodyDef wallBodyDef;
         wallBodyDef.position.Set(x, y);
         b2Body* wallBody = world.CreateBody(&wallBodyDef);
         b2PolygonShape wallBox;
         wallBox.SetAsBox(w/2, h/2);
         wallBody->CreateFixture(&wallBox, 0.0f);
+
         this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
     }
 
@@ -145,7 +146,7 @@ void PhagocyteWidget::setupLevel3()
         QJsonDocument bacteriaDoc = QJsonDocument::fromJson(bacteriaData);
         QJsonArray bacteriaArray = bacteriaDoc["bacteria"].toArray();
 
-        std::cout << bacteriaArray.size() << std::endl;
+        // Define bacteria colliders and set them up for drawing
         for(const QJsonValue &bacterium : bacteriaArray)
         {
             int x = bacterium.toArray()[0].toInt();
@@ -171,6 +172,7 @@ void PhagocyteWidget::setupLevel3()
  */
 void PhagocyteWidget::paintEvent(QPaintEvent *)
 {
+    // Define which animation frame to display -- sequence is 1,2,3,2,1,2,3,etc
     animationCounter++;
     int frameIndex = fmod(animationCounter, 40) / 10;
     if (frameIndex == 2)
@@ -201,16 +203,13 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
         rotatedImg = bacteriaImg[frameIndex].transformed(QTransform().rotate(bacterium->GetAngle()));
         painter.drawImage(QRect((int)(bacteriaPos.x)-32,  (int)(bacteriaPos.y)-32  , 64, 64), rotatedImg);
     }
-
-   // width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
-
-
+    //Draw Walls
     for(QRect wall: walls)
     {
         painter.fillRect(wall, QBrush(Qt::yellow));
     }
 
-    //fog of war
+    //Fog of War
     //put an if around this?
     painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
@@ -222,7 +221,6 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
 void PhagocyteWidget::updateWorld()
 {
     // User Input Deciphering
-
     if(aKeyDown)
     {
         angle -= 2;
@@ -272,20 +270,20 @@ void PhagocyteWidget::keyDown(Qt::Key key)
 {
     switch (key)
     {
-        case Qt::Key_W:
-            wKeyDown = true;
-            break;
-        case Qt::Key_A:
-            aKeyDown = true;
-            break;
-        case Qt::Key_S:
-            sKeyDown = true;
-            break;
-        case Qt::Key_D:
-            dKeyDown = true;
-            break;
-        default:
-            break;
+    case Qt::Key_W:
+        wKeyDown = true;
+        break;
+    case Qt::Key_A:
+        aKeyDown = true;
+        break;
+    case Qt::Key_S:
+        sKeyDown = true;
+        break;
+    case Qt::Key_D:
+        dKeyDown = true;
+        break;
+    default:
+        break;
     }
 }
 
@@ -297,19 +295,19 @@ void PhagocyteWidget::keyUp(Qt::Key key)
 {
     switch (key)
     {
-        case Qt::Key_W:
-            wKeyDown = false;
-            break;
-        case Qt::Key_A:
-            aKeyDown = false;
-            break;
-        case Qt::Key_S:
-            sKeyDown = false;
-            break;
-        case Qt::Key_D:
-            dKeyDown = false;
-            break;
-        default:
-            break;
+    case Qt::Key_W:
+        wKeyDown = false;
+        break;
+    case Qt::Key_A:
+        aKeyDown = false;
+        break;
+    case Qt::Key_S:
+        sKeyDown = false;
+        break;
+    case Qt::Key_D:
+        dKeyDown = false;
+        break;
+    default:
+        break;
     }
 }

@@ -3,7 +3,7 @@
  * CS3505 - A8 Educational App
  * 18 April 2023
  *
- * This class holds the methods for
+ * This class serves as the interface between the UI and the model code.
  *
  * Code Style Review by:
  */
@@ -118,7 +118,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-
+/**
+ * @brief MainWindow::clearButtons Resets buttons for level 1
+ */
 void MainWindow::clearButtons()
 {
     ui->button1->setChecked(false);
@@ -132,6 +134,10 @@ void MainWindow::clearButtons()
     ui->button9->setChecked(false);
 }
 
+/**
+ * @brief MainWindow::flashSelectedButtons Flashes buttons when they are clicked in level 1
+ * @param color
+ */
 void MainWindow::flashSelectedButtons(QString color)
 {
     if(ui->button1->isChecked())
@@ -156,6 +162,9 @@ void MainWindow::flashSelectedButtons(QString color)
      QTimer::singleShot(500, this, &MainWindow::unflashSelectedButtons);
 }
 
+/**
+ * @brief MainWindow::unflashSelectedButtons Changes the color of buttons when they are clicked
+ */
 void MainWindow::unflashSelectedButtons()
 {
     ui->button1->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
