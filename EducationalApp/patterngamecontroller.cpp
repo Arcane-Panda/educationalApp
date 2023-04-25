@@ -12,9 +12,6 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     lightBluePattern = {1, 4, 6, 7, 8, 9};
     purplePattern = {2, 4, 5, 6, 8};
     yellowPattern = {1, 3, 5, 7, 9};
-    greenImage = QImage(":/resource/GreenPattern.png");
-    orangeImage = QImage(":/resource/OrangePattern.png");
-    pinkImage = QImage(":/resource/PinkPattern.png");
 
     //create mappings from ints to pattern sets
     patternMapping[0] = greenPattern;
@@ -38,10 +35,10 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     imageMapping[0] = QPixmap(QString(":/resource/GreenPattern.png"));
     imageMapping[1] = QPixmap(QString(":/resource/OrangePattern.png"));
     imageMapping[2] = QPixmap(QString(":/resource/PinkPattern.png"));
-    imageMapping[3] = QPixmap(QString(":/resource/GreenPattern.png"));
-    imageMapping[4] = QPixmap(QString(":/resource/GreenPattern.png"));
-    imageMapping[5] = QPixmap(QString(":/resource/GreenPattern.png"));
-    imageMapping[6] = QPixmap(QString(":/resource/GreenPattern.png"));
+    imageMapping[3] = QPixmap(QString(":/resource/BluePattern.png"));
+    imageMapping[4] = QPixmap(QString(":/resource/LightBluePattern.png"));
+    imageMapping[5] = QPixmap(QString(":/resource/PurplePattern.png"));
+    imageMapping[6] = QPixmap(QString(":/resource/YellowPattern.png"));
 
 
     //fill the queued patterns
@@ -275,11 +272,11 @@ void PatternGameController::paintEvent(QPaintEvent *)
 
     for(b2Body* bacteriaBody : bacterium)
     {
-        painter.drawImage(QRect(bacteriaBody->GetPosition().x - 10, bacteriaBody->GetPosition().y - 10, 20, 20), greenImage); // TODO bacteria image
+        //painter.drawImage(QRect(bacteriaBody->GetPosition().x - 10, bacteriaBody->GetPosition().y - 10, 20, 20), imageMapping[0]); // TODO bacteria image
     }
     for(b2Body* proteinBody : proteins)
     {
-        painter.drawImage(QRect(proteinBody->GetPosition().x - 5, proteinBody->GetPosition().y - 5, 10, 10), orangeImage); // TODO default protein image
+        //painter.drawImage(QRect(proteinBody->GetPosition().x - 5, proteinBody->GetPosition().y - 5, 10, 10), imageMapping[1]); // TODO default protein image
     }
 
     // TODO draw defending cell
@@ -295,7 +292,7 @@ void PatternGameController::updateDisplayedPatterns()
     //shift the moves and add a new random move
     queuedPatterns[2] = queuedPatterns[1];
     queuedPatterns[1] = queuedPatterns[0];
-    queuedPatterns[0] = arc4random() % 7;
+    queuedPatterns[0] = rand() % 7;
 
     //updates the view by sending in the images to the MainWindow
     emit updateImages(imageMapping[queuedPatterns[0]], imageMapping[queuedPatterns[1]], imageMapping[queuedPatterns[2]]);

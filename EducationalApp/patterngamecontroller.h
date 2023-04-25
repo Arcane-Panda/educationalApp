@@ -65,10 +65,6 @@ private:
     map<int, QString> colorMapping;
     map<int, QPixmap> imageMapping;
 
-
-    QImage greenImage;
-    QImage pinkImage;
-    QImage orangeImage;
     QTimer timer;
     int framesTillNextSpawn;
     int bacteriaWave;
