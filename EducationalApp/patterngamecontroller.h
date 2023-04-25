@@ -61,6 +61,10 @@ private:
 
     vector<int> queuedPatterns;
 
+    QImage bacteriaImage;
+    QImage defendCellImage;
+    QImage c3ProteinImage;
+
     map<int, set<int>> patternMapping;
     map<int, QString> colorMapping;
     map<int, QPixmap> imageMapping;

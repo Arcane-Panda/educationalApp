@@ -40,6 +40,9 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     imageMapping[5] = QPixmap(QString(":/resource/PurplePattern.png"));
     imageMapping[6] = QPixmap(QString(":/resource/YellowPattern.png"));
 
+    bacteriaImage = QImage(":/resource/Bacteria1.png");
+    //defendCellImage = QImage(":/resource/");
+    //c3ProteinImage = QImage(":/resource/");
 
     //fill the queued patterns
     queuedPatterns.push_back(0);
@@ -272,7 +275,7 @@ void PatternGameController::paintEvent(QPaintEvent *)
 
     for(b2Body* bacteriaBody : bacterium)
     {
-        //painter.drawImage(QRect(bacteriaBody->GetPosition().x - 10, bacteriaBody->GetPosition().y - 10, 20, 20), imageMapping[0]); // TODO bacteria image
+        painter.drawImage(QRect(bacteriaBody->GetPosition().x - 10, bacteriaBody->GetPosition().y - 10, 20, 20), bacteriaImage); // TODO bacteria image
     }
     for(b2Body* proteinBody : proteins)
     {
