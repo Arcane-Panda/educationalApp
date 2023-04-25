@@ -180,7 +180,7 @@ void PatternGameController::createBacteria(int count)
         bacteriaBodyDef.type = b2_dynamicBody;
         b2Body* bacteriaBody = world.CreateBody(&bacteriaBodyDef);
         b2CircleShape hitbox;
-        hitbox.m_radius = 10.0f;
+        hitbox.m_radius = 20.0f;
 
         // Define the dynamic body fixture.
         b2FixtureDef fixtureDef;
@@ -283,8 +283,16 @@ void PatternGameController::paintEvent(QPaintEvent *)
 
     for(b2Body* bacteriaBody : bacterium)
     {
-        cout << "drawn bacteria" << endl;
-        painter.drawImage(QRect(bacteriaBody->GetPosition().x - 10, bacteriaBody->GetPosition().y - 10, 20, 20), bacteriaImage);
+        float bacX = bacteriaBody->GetPosition().x;
+        float bacY = bacteriaBody->GetPosition().y;
+        float angle = atan((bacY - 340.0f) / (bacX - 340.0f));
+        if(bacX < 340.0f)
+            angle = angle + M_PI;
+        angle = angle - 3*M_PI_4; // adjustment due to image already being rotated 45°
+        float rotImgWidth = 40 * (cos(abs(fmod(angle,M_PI_2))) + sin(abs(fmod(angle,M_PI_2))));
+
+        QImage rotatedImg = bacteriaImage.transformed(QTransform().rotateRadians(angle));
+        painter.drawImage(QRect(bacteriaBody->GetPosition().x - 20, bacteriaBody->GetPosition().y - 20, rotImgWidth, rotImgWidth), rotatedImg);
     }
     for(b2Body* proteinBody : proteins)
     {
