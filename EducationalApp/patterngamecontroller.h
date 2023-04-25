@@ -6,12 +6,14 @@
 #include <iostream>
 #include <Box2D/Box2D.h>
 #include <QTimer>
+#include <queue>
 
 using std::set;
 using std::cout;
 using std::endl;
 using std::vector;
 using std::rand;
+using std::queue;
 
 class PatternGameController : public QWidget
 {
@@ -49,6 +51,13 @@ private:
     set<int> greenPattern;
     set<int> pinkPattern;
     set<int> orangePattern;
+    set<int> bluePattern;
+    set<int> lightBluePattern;
+    set<int> purplePattern;
+    set<int> yellowPattern;
+
+    queue<int> queuedPatterns;
+
     QImage greenImage;
     QImage pinkImage;
     QImage orangeImage;

@@ -4,12 +4,22 @@
 PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     world(b2Vec2(0.0f, 0.0f))
 {
+    //set matching patterns
     greenPattern = {1, 2, 5, 6, 7, 8};
     pinkPattern = {3, 4, 5, 6, 7, 9};
     orangePattern = {4, 5, 8, 9};
+    bluePattern = {1, 2, 3, 5, 8};
+    lightBluePattern = {1, 4, 6, 7, 8, 9};
+    purplePattern = {2, 4, 5, 6, 8};
+    yellowPattern = {1, 3, 5, 7, 9};
     greenImage = QImage(":/resource/GreenPattern.png");
     orangeImage = QImage(":/resource/OrangePattern.png");
     pinkImage = QImage(":/resource/PinkPattern.png");
+
+    //fill the queued patterns
+    queuedPatterns.push(arc4random() % 7);
+    queuedPatterns.push(arc4random() % 7);
+    queuedPatterns.push(arc4random() % 7);
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -35,25 +45,49 @@ void PatternGameController::checkPattern(bool pushed)
     //Check to see if the entered pattern matches any of the correct patterns
     if(compareSets(&entered, &greenPattern))
     {
-        emit flashSelectedButtons(QString("rgb(23,186,62)"));
-        createProteins(3);
-        cout << "Matches green!" << endl;
+       emit flashSelectedButtons(QString("rgb(23,186,62)"));
+       createProteins(0);
+       cout << "Matches green!" << endl;
     }
     else if(compareSets(&entered, &pinkPattern))
     {
-        emit flashSelectedButtons(QString("rgb(254,170,202)"));
-        createProteins(3);
-        cout << "Matches pink!" << endl;
+       emit flashSelectedButtons(QString("rgb(254,170,202)"));
+       createProteins(1);
+       cout << "Matches pink!" << endl;
     }
     else if (compareSets(&entered, &orangePattern))
     {
-        emit flashSelectedButtons(QString("rgb(218,164,2)"));
-        createProteins(3);
-        cout << "Matches orange!" << endl;
+       emit flashSelectedButtons(QString("rgb(218,164,2)"));
+       createProteins(2);
+       cout << "Matches orange!" << endl;
+    }
+    else if (compareSets(&entered, &bluePattern))
+    {
+       emit flashSelectedButtons(QString("rgb(32,32,255)"));
+       createProteins(2);
+       cout << "Matches blue!" << endl;
+    }
+    else if (compareSets(&entered, &lightBluePattern))
+    {
+       emit flashSelectedButtons(QString("rgb(160,244,255)"));
+       createProteins(2);
+       cout << "Matches light blue!" << endl;
+    }
+    else if (compareSets(&entered, &purplePattern))
+    {
+       emit flashSelectedButtons(QString("rgb(185, 64, 255)"));
+       createProteins(2);
+       cout << "Matches purple!" << endl;
+    }
+    else if (compareSets(&entered, &yellowPattern))
+    {
+       emit flashSelectedButtons(QString("rgb(255,244,160)"));
+       createProteins(2);
+       cout << "Matches yellow!" << endl;
     }
     else
     {
-        cout << "Matches none :(" << endl;
+       cout << "Matches none :(" << endl;
     }
 
 
