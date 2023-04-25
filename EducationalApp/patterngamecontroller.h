@@ -10,6 +10,8 @@
 using std::set;
 using std::cout;
 using std::endl;
+using std::vector;
+using std::rand;
 
 class PatternGameController : public QWidget
 {
@@ -40,8 +42,8 @@ public slots:
 
 
 private:
-    b2Body* protein;
-    b2Body* bacteria;
+    vector<b2Body*> bacterium;
+    vector<b2Body*> proteins;
     b2World world;
     set<int> entered;
     set<int> greenPattern;
@@ -51,7 +53,11 @@ private:
     QImage pinkImage;
     QImage orangeImage;
     QTimer timer;
-    void createProteins(int color);
+    int framesTillNextSpawn;
+    int bacteriaWave;
+    int score;
+    void createProteins(int count);
+    void createBacteria(int count);
     bool compareSets(set<int>* , set<int>*);
 };
 

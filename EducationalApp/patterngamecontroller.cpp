@@ -15,25 +15,10 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(200.0f, 200.0f);
 
-    bacteria = world.CreateBody(&bodyDef);
 
-    // Define another box shape for our dynamic body.
-    b2CircleShape hitbox;
-    hitbox.m_radius = 10.0f;
-
-    // Define the dynamic body fixture.
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &hitbox;
-
-    // Set the box density to be non-zero, so it will be dynamic.
-    fixtureDef.density = 0.001f;
-
-    // Override the default friction.
-    fixtureDef.friction = 50.0f;
-    fixtureDef.restitution = 0.2;
-    // Add the shape to the body.
-    bacteria->CreateFixture(&fixtureDef);
-
+    framesTillNextSpawn = 300;
+    bacteriaWave = 0;
+    score = 100;
     connect(&timer, &QTimer::timeout, this, &PatternGameController::updateWorld);
     timer.start(17);
 }
@@ -51,19 +36,19 @@ void PatternGameController::checkPattern(bool pushed)
     if(compareSets(&entered, &greenPattern))
     {
         emit flashSelectedButtons(QString("rgb(23,186,62)"));
-        createProteins(0);
+        createProteins(3);
         cout << "Matches green!" << endl;
     }
     else if(compareSets(&entered, &pinkPattern))
     {
         emit flashSelectedButtons(QString("rgb(254,170,202)"));
-        createProteins(1);
+        createProteins(3);
         cout << "Matches pink!" << endl;
     }
     else if (compareSets(&entered, &orangePattern))
     {
         emit flashSelectedButtons(QString("rgb(218,164,2)"));
-        createProteins(2);
+        createProteins(3);
         cout << "Matches orange!" << endl;
     }
     else
@@ -150,42 +135,47 @@ void PatternGameController::buttonPushed9(bool pushed)
     updateEntered(9, pushed);
 }
 
-void PatternGameController::createProteins(int color)
+void PatternGameController::createBacteria(int count)
 {
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(340.0f, 340.0f); // TODO randomize in circle?
-
-    protein = world.CreateBody(&bodyDef);
-
-    // Define another box shape for our dynamic body.
-    b2CircleShape hitbox;
-    hitbox.m_radius = 5.0f;
-
-    // Define the dynamic body fixture.
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &hitbox;
-
-    // Set the box density to be non-zero, so it will be dynamic.
-    fixtureDef.density = 0.001f;
-
-    // Override the default friction.
-    fixtureDef.friction = 50.0f;
-    fixtureDef.restitution = 0.2;
-    // Add the shape to the body.
-    protein->CreateFixture(&fixtureDef);
-
-    // Add Protein and body to map so that it knows its color?
-    switch (color)
+    for (int i = 0; i < count; i++)
     {
-    case 0: // Green
-        break;
-    case 1: // Pink
+        b2BodyDef bacteriaBodyDef;
+        int angle = (rand() * 360);
+        bacteriaBodyDef.position.Set(340 + 330 * cos(angle), 340 + 330 * sin(angle));
+        bacteriaBodyDef.type = b2_dynamicBody;
+        b2Body* bacteriaBody = world.CreateBody(&bacteriaBodyDef);
+        b2CircleShape hitbox;
+        hitbox.m_radius = 10.0f;
 
-        break;
-    case 2: // Orange
+        // Define the dynamic body fixture.
+        b2FixtureDef fixtureDef;
+        fixtureDef.shape = &hitbox;
+        fixtureDef.filter.groupIndex = 1;
+        bacteriaBody->CreateFixture(&fixtureDef);
 
-        break;
+        this->bacterium.push_back(bacteriaBody);
+    }
+}
+
+void PatternGameController::createProteins(int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        b2BodyDef proteinBodyDef;
+        int angle = (rand() % 360);
+        proteinBodyDef.position.Set(340 + 35 * cos(angle), 340 + 35 * sin(angle));
+        proteinBodyDef.type = b2_dynamicBody;
+        b2Body* proteinBody = world.CreateBody(&proteinBodyDef);
+        b2CircleShape hitbox;
+        hitbox.m_radius = 5.0f;
+
+        // Define the dynamic body fixture.
+        b2FixtureDef fixtureDef;
+        fixtureDef.filter.groupIndex = 2;
+        fixtureDef.shape = &hitbox;
+        proteinBody->CreateFixture(&fixtureDef);
+
+        this->proteins.push_back(proteinBody);
     }
 }
 
@@ -196,14 +186,54 @@ void PatternGameController::updateWorld()
 {
     // Move All Bacteria Towards the cell (don't if it has been marked with proteins)
 
-    b2Vec2 center = b2Vec2(340, 340);
-    b2Vec2 forceVec = b2Vec2(center.x - bacteria->GetPosition().x, center.y - bacteria->GetPosition().y);
-    bacteria->ApplyForceToCenter(forceVec, true);
+    for(b2Body* bacteriaBody : bacterium)
+    {
+        b2Vec2 center = b2Vec2(340, 340);
+        b2Vec2 forceVec = b2Vec2(center.x - bacteriaBody->GetPosition().x, center.y - bacteriaBody->GetPosition().y);
+        bacteriaBody->ApplyForceToCenter(forceVec, true);
 
-    // Spawn in bacteria some kind of wave
+        int bacteriaKey;
+
+        for(int i = 0; i < (int)bacterium.size(); i++)
+        {
+            if(bacterium[i] == bacteriaBody)
+            {
+                bacteriaKey = i;
+            }
+        }
+
+        for(b2ContactEdge* edge = bacteriaBody->GetContactList(); edge; edge = edge->next)
+        {
+            b2Body* collideBody = edge->contact->GetFixtureA()->GetBody();
+            for(int i = 0; i < (int)proteins.size(); i++)
+            {
+                if(proteins[i] == collideBody)
+                {
+                    proteins.erase(proteins.begin()+i);
+                    world.DestroyBody(collideBody);
+                    bacterium.erase(bacterium.begin()+bacteriaKey);
+                    world.DestroyBody(bacteriaBody);
+                    break;
+                }
+            }
+        }
+    }
+
+    // Check for collisions between every bacteria and protein TODO
+
+
 
     // It is generally best to keep the time step and iterations fixed.
     world.Step(1.0/60.0, 6, 2);
+
+    // Every 3 seconds another wave of bacteria comes
+    framesTillNextSpawn--;
+    if (framesTillNextSpawn < 0)
+    {
+        framesTillNextSpawn = 300;
+        bacteriaWave += rand() % 2;
+        createBacteria(bacteriaWave);
+    }
     update();
 }
 
@@ -215,10 +245,16 @@ void PatternGameController::paintEvent(QPaintEvent *)
     // Create a painter
     QPainter painter(this);
 
-    painter.drawImage(QRect(bacteria->GetPosition().x - 10, bacteria->GetPosition().y - 10, 20, 20), greenImage);
-    if (protein)
+    for(b2Body* bacteriaBody : bacterium)
     {
-        painter.drawImage(QRect(protein->GetPosition().x - 5, protein->GetPosition().y - 5, 10, 10), orangeImage);
+        painter.drawImage(QRect(bacteriaBody->GetPosition().x - 10, bacteriaBody->GetPosition().y - 10, 20, 20), greenImage); // TODO bacteria image
     }
+    for(b2Body* proteinBody : proteins)
+    {
+        painter.drawImage(QRect(proteinBody->GetPosition().x - 5, proteinBody->GetPosition().y - 5, 10, 10), orangeImage); // TODO default protein image
+    }
+
+    // TODO draw defending cell
+
     painter.end();
 }
