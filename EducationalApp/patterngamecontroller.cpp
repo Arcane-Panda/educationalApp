@@ -41,18 +41,25 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     imageMapping[6] = QPixmap(QString(":/resource/YellowPattern.png"));
 
     bacteriaImage = QImage(":/resource/Bacteria1.png");
-    //defendCellImage = QImage(":/resource/");
-    //c3ProteinImage = QImage(":/resource/");
+    defendCellImage = QImage(":/resource/Cell.png");
+    c3ProteinImage = QImage(":/resource/ProteinSprite.png");
 
     //fill the queued patterns
     queuedPatterns.push_back(0);
     queuedPatterns.push_back(1);
     queuedPatterns.push_back(2);
 
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(200.0f, 200.0f);
+    b2BodyDef cellBodyDef;
+    cellBodyDef.position.Set(340, 340);
+    b2Body* cellBody = world.CreateBody(&cellBodyDef);
+    b2CircleShape hitbox;
+    hitbox.m_radius = 30.0f;
 
+    // Define the dynamic body fixture.
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &hitbox;
+    fixtureDef.filter.groupIndex = 3;
+    cellBody->CreateFixture(&fixtureDef);
 
     framesTillNextSpawn = 300;
     bacteriaWave = 0;
@@ -80,6 +87,7 @@ void PatternGameController::checkPattern(bool pushed)
     }
     else
     {
+       emit flashSelectedButtons(QString("rgb(255,30,30)"));
        cout << "Matches none :(" << endl;
     }
 
@@ -275,14 +283,15 @@ void PatternGameController::paintEvent(QPaintEvent *)
 
     for(b2Body* bacteriaBody : bacterium)
     {
-        painter.drawImage(QRect(bacteriaBody->GetPosition().x - 10, bacteriaBody->GetPosition().y - 10, 20, 20), bacteriaImage); // TODO bacteria image
+        cout << "drawn bacteria" << endl;
+        painter.drawImage(QRect(bacteriaBody->GetPosition().x - 10, bacteriaBody->GetPosition().y - 10, 20, 20), bacteriaImage);
     }
     for(b2Body* proteinBody : proteins)
     {
-        //painter.drawImage(QRect(proteinBody->GetPosition().x - 5, proteinBody->GetPosition().y - 5, 10, 10), imageMapping[1]); // TODO default protein image
+        painter.drawImage(QRect(proteinBody->GetPosition().x - 5, proteinBody->GetPosition().y - 5, 10, 10), c3ProteinImage);
     }
 
-    // TODO draw defending cell
+    painter.drawImage(QRect(310, 310, 60, 60), defendCellImage);
 
     painter.end();
 }

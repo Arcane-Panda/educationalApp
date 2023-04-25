@@ -18,5 +18,9 @@
         <file>LightBluePattern.png</file>
         <file>PurplePattern.png</file>
         <file>YellowPattern.png</file>
+        <file>Cell.png</file>
+        <file>DrCatDog1.png</file>
+        <file>DrCatDog2.png</file>
+        <file>ProteinSprite.png</file>
     </qresource>
 </RCC>
