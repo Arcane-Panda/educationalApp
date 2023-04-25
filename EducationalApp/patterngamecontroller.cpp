@@ -186,6 +186,7 @@ void PatternGameController::updateWorld()
 {
     // Move All Bacteria Towards the cell (don't if it has been marked with proteins)
 
+    getOutOfCurrentBacteria:
     for(b2Body* bacteriaBody : bacterium)
     {
         b2Vec2 center = b2Vec2(340, 340);
@@ -213,7 +214,7 @@ void PatternGameController::updateWorld()
                     world.DestroyBody(collideBody);
                     bacterium.erase(bacterium.begin()+bacteriaKey);
                     world.DestroyBody(bacteriaBody);
-                    break;
+                    goto getOutOfCurrentBacteria;
                 }
             }
         }
