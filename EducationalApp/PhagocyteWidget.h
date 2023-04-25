@@ -42,7 +42,7 @@ private:
     b2World world;
     b2Body* body;
     vector<QRect> walls;
-    vector<QPoint> bacteria;
+    vector<b2Body*> bacteria;
     QTimer timer;
     QImage phagocyteImg[3];
     QImage bacteriaImg[3];

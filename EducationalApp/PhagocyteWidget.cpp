@@ -124,8 +124,8 @@ void PhagocyteWidget::setupLevel3()
     {
         int x = borderWallInfo[i][0];
 
-            int y =  borderWallInfo[i][1];
-            int w =  borderWallInfo[i][2];
+            int y = borderWallInfo[i][1];
+            int w = borderWallInfo[i][2];
             int h = borderWallInfo[i][3];
 
             b2BodyDef wallBodyDef;
@@ -141,7 +141,6 @@ void PhagocyteWidget::setupLevel3()
     QFile bacteriaFile(QString(":/resource/bacteria.json"));
     if(bacteriaFile.open(QIODevice::ReadOnly))
     {
-        std::cout << "opening bacteria file" << std::endl;
         QByteArray bacteriaData = bacteriaFile.readAll();
         QJsonDocument bacteriaDoc = QJsonDocument::fromJson(bacteriaData);
         QJsonArray bacteriaArray = bacteriaDoc["bacteria"].toArray();
@@ -149,18 +148,18 @@ void PhagocyteWidget::setupLevel3()
         std::cout << bacteriaArray.size() << std::endl;
         for(const QJsonValue &bacterium : bacteriaArray)
         {
-            std::cout << "adding bacteria" << std::endl;
             int x = bacterium.toArray()[0].toInt();
             int y = bacterium.toArray()[1].toInt();
 
-            b2BodyDef wallBodyDef;
-            wallBodyDef.position.Set(x+32, y+32);
-            b2Body* wallBody = world.CreateBody(&wallBodyDef);
-            b2PolygonShape wallBox;
-            wallBox.SetAsBox(8, 8);
-            wallBody->CreateFixture(&wallBox, 0.0f);
+            b2BodyDef bacteriaBodyDef;
+            bacteriaBodyDef.position.Set(x+32, y+32);
+            b2Body* bacteriaBody = world.CreateBody(&bacteriaBodyDef);
+            b2PolygonShape hitBox;
+            hitBox.SetAsBox(8, 8);
+            bacteriaBody->CreateFixture(&hitBox, 0.0f);
 
-            this->bacteria.push_back(QPoint(x,y));
+            this->bacteria.push_back(bacteriaBody);
+            bacteriaBody->SetTransform(bacteriaBody->GetPosition(), rand()%360);
         }
     }
 
@@ -187,18 +186,20 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
     QPainter painter(this);
     b2Vec2 position = body->GetPosition();
 
-    painter.drawImage(QRect(0, 0, 1400, 1400), backgroundBlood);
+    painter.drawImage(QRect(0, 0, 1400, 800), backgroundBlood);
+
+
     //Draw Phagocyte
     QImage rotatedImg = phagocyteImg[frameIndex].transformed(QTransform().rotate(angle));
     float width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
     painter.drawImage(QRect((int)(position.x) - width / 2, (int)(position.y) - width / 2, width, width), rotatedImg);
 
     //Draw Bacteria
-    for(QPoint bacterium : bacteria)
+    for(b2Body* bacterium : bacteria)
     {
-        std::cout << "drawing bacteria" << std::endl;
-        rotatedImg = bacteriaImg[frameIndex].transformed(QTransform().rotate(-45));
-        painter.drawImage(QRect((int)(bacterium.x()),  (int)(bacterium.y())  , 64, 64), rotatedImg);
+        b2Vec2 bacteriaPos = bacterium->GetPosition();
+        rotatedImg = bacteriaImg[frameIndex].transformed(QTransform().rotate(bacterium->GetAngle()));
+        painter.drawImage(QRect((int)(bacteriaPos.x)-32,  (int)(bacteriaPos.y)-32  , 64, 64), rotatedImg);
     }
 
    // width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
@@ -242,6 +243,21 @@ void PhagocyteWidget::updateWorld()
         b2Vec2 forceVec = b2Vec2(-speed * cos(angle * M_PI/180), -speed * sin(angle * M_PI/180));
         body->ApplyForceToCenter(forceVec, true);
     }
+
+    //check collisions
+    for(b2ContactEdge* edge = body->GetContactList(); edge; edge = edge->next)
+    {
+        b2Body* bacteriaBody = edge->contact->GetFixtureA()->GetBody();
+        for(int i = 0; i < (int)bacteria.size(); i++)
+        {
+            if(bacteria[i] == bacteriaBody)
+            {
+                bacteria.erase(bacteria.begin()+i);
+                world.DestroyBody(bacteriaBody);
+            }
+        }
+    }
+
 
     // It is generally best to keep the time step and iterations fixed.
     world.Step(1.0/60.0, 6, 2);
