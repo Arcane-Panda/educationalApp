@@ -34,11 +34,13 @@ public slots:
     void clearButtons();
     void flashSelectedButtons(QString);
     void unflashSelectedButtons();
+    void updateImages(QPixmap, QPixmap, QPixmap);
 
 private:
     Ui::MainWindow *ui;
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
+    QString getImage(int);
 };
 
 #endif // MAINWINDOW_H

@@ -207,13 +207,13 @@
          </item>
         </layout>
        </widget>
-       <widget class="QLabel" name="GreenPattern">
+       <widget class="QLabel" name="LeftPattern">
         <property name="geometry">
          <rect>
-          <x>830</x>
-          <y>40</y>
-          <width>171</width>
-          <height>171</height>
+          <x>880</x>
+          <y>70</y>
+          <width>111</width>
+          <height>111</height>
          </rect>
         </property>
         <property name="frameShape">
@@ -277,13 +277,13 @@
          <string>Display</string>
         </property>
        </widget>
-       <widget class="QLabel" name="OrangePattern">
+       <widget class="QLabel" name="MiddlePattern">
         <property name="geometry">
          <rect>
           <x>1010</x>
-          <y>40</y>
-          <width>171</width>
-          <height>171</height>
+          <y>70</y>
+          <width>111</width>
+          <height>111</height>
          </rect>
         </property>
         <property name="frameShape">
@@ -296,10 +296,10 @@
          <string>Example 2</string>
         </property>
        </widget>
-       <widget class="QLabel" name="PinkPattern">
+       <widget class="QLabel" name="RightPattern">
         <property name="geometry">
          <rect>
-          <x>1190</x>
+          <x>1150</x>
           <y>40</y>
           <width>171</width>
           <height>171</height>
@@ -360,7 +360,7 @@
      <x>0</x>
      <y>0</y>
      <width>1400</width>
-     <height>22</height>
+     <height>37</height>
     </rect>
    </property>
   </widget>

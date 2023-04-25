@@ -6,8 +6,8 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
 {
     //set matching patterns
     greenPattern = {1, 2, 5, 6, 7, 8};
-    pinkPattern = {3, 4, 5, 6, 7, 9};
     orangePattern = {4, 5, 8, 9};
+    pinkPattern = {3, 4, 5, 6, 7, 9};
     bluePattern = {1, 2, 3, 5, 8};
     lightBluePattern = {1, 4, 6, 7, 8, 9};
     purplePattern = {2, 4, 5, 6, 8};
@@ -16,10 +16,38 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     orangeImage = QImage(":/resource/OrangePattern.png");
     pinkImage = QImage(":/resource/PinkPattern.png");
 
+    //create mappings from ints to pattern sets
+    patternMapping[0] = greenPattern;
+    patternMapping[1] = orangePattern;
+    patternMapping[2] = pinkPattern;
+    patternMapping[3] = bluePattern;
+    patternMapping[4] = lightBluePattern;
+    patternMapping[5] = purplePattern;
+    patternMapping[6] = yellowPattern;
+
+    //create mappings from ints to colors
+    colorMapping[0] = QString("rgb(23,186,62)");
+    colorMapping[1] = QString("rgb(218,164,2)");
+    colorMapping[2] = QString("rgb(254,170,202)");
+    colorMapping[3] = QString("rgb(32,32,255)");
+    colorMapping[4] = QString("rgb(160,244,255)");
+    colorMapping[5] = QString("rgb(185, 64, 255)");
+    colorMapping[6] = QString("rgb(255,244,160)");
+
+    //create mappings from ints to QPixmap images
+    imageMapping[0] = QPixmap(QString(":/resource/GreenPattern.png"));
+    imageMapping[1] = QPixmap(QString(":/resource/OrangePattern.png"));
+    imageMapping[2] = QPixmap(QString(":/resource/PinkPattern.png"));
+    imageMapping[3] = QPixmap(QString(":/resource/GreenPattern.png"));
+    imageMapping[4] = QPixmap(QString(":/resource/GreenPattern.png"));
+    imageMapping[5] = QPixmap(QString(":/resource/GreenPattern.png"));
+    imageMapping[6] = QPixmap(QString(":/resource/GreenPattern.png"));
+
+
     //fill the queued patterns
-    queuedPatterns.push(arc4random() % 7);
-    queuedPatterns.push(arc4random() % 7);
-    queuedPatterns.push(arc4random() % 7);
+    queuedPatterns.push_back(0);
+    queuedPatterns.push_back(1);
+    queuedPatterns.push_back(2);
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -43,57 +71,22 @@ void PatternGameController::checkPattern(bool pushed)
     cout << endl;
 
     //Check to see if the entered pattern matches any of the correct patterns
-    if(compareSets(&entered, &greenPattern))
+    if(compareSets(&entered, &patternMapping[queuedPatterns[2]]))
     {
-       emit flashSelectedButtons(QString("rgb(23,186,62)"));
-       createProteins(0);
-       cout << "Matches green!" << endl;
-    }
-    else if(compareSets(&entered, &pinkPattern))
-    {
-       emit flashSelectedButtons(QString("rgb(254,170,202)"));
-       createProteins(1);
-       cout << "Matches pink!" << endl;
-    }
-    else if (compareSets(&entered, &orangePattern))
-    {
-       emit flashSelectedButtons(QString("rgb(218,164,2)"));
+       emit flashSelectedButtons(colorMapping[queuedPatterns[2]]);
        createProteins(2);
-       cout << "Matches orange!" << endl;
-    }
-    else if (compareSets(&entered, &bluePattern))
-    {
-       emit flashSelectedButtons(QString("rgb(32,32,255)"));
-       createProteins(2);
-       cout << "Matches blue!" << endl;
-    }
-    else if (compareSets(&entered, &lightBluePattern))
-    {
-       emit flashSelectedButtons(QString("rgb(160,244,255)"));
-       createProteins(2);
-       cout << "Matches light blue!" << endl;
-    }
-    else if (compareSets(&entered, &purplePattern))
-    {
-       emit flashSelectedButtons(QString("rgb(185, 64, 255)"));
-       createProteins(2);
-       cout << "Matches purple!" << endl;
-    }
-    else if (compareSets(&entered, &yellowPattern))
-    {
-       emit flashSelectedButtons(QString("rgb(255,244,160)"));
-       createProteins(2);
-       cout << "Matches yellow!" << endl;
+       updateDisplayedPatterns();
+       cout << "Matches!" << endl;
     }
     else
     {
        cout << "Matches none :(" << endl;
     }
 
-
     //Clear the selected pattern
     entered.clear();
     emit clearButtons();
+
 }
 
 bool PatternGameController::compareSets(set<int>* set1, set<int>* set2)
@@ -292,4 +285,18 @@ void PatternGameController::paintEvent(QPaintEvent *)
     // TODO draw defending cell
 
     painter.end();
+}
+
+/**
+ * @brief PatternGameController::updateDisplayedPatterns Updates the current and queued patterns
+ */
+void PatternGameController::updateDisplayedPatterns()
+{
+    //shift the moves and add a new random move
+    queuedPatterns[2] = queuedPatterns[1];
+    queuedPatterns[1] = queuedPatterns[0];
+    queuedPatterns[0] = arc4random() % 7;
+
+    //updates the view by sending in the images to the MainWindow
+    emit updateImages(imageMapping[queuedPatterns[0]], imageMapping[queuedPatterns[1]], imageMapping[queuedPatterns[2]]);
 }

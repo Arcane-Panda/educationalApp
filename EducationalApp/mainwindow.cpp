@@ -47,11 +47,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->fireButton, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::checkPattern);
     connect(ui->PatternGameDisplay, &PatternGameController::clearButtons, this, &MainWindow::clearButtons);
     connect(ui->PatternGameDisplay, &PatternGameController::flashSelectedButtons, this, &MainWindow::flashSelectedButtons);
+    connect(ui->PatternGameDisplay, &PatternGameController::updateImages, this, &MainWindow::updateImages);
 
     // Level 1 UI
-    ui->GreenPattern->setPixmap(QPixmap(":/resource/GreenPattern.png").scaled(163,163,Qt::KeepAspectRatio));
-    ui->OrangePattern->setPixmap(QPixmap(":/resource/OrangePattern.png").scaled(163,163,Qt::KeepAspectRatio));
-    ui->PinkPattern->setPixmap(QPixmap(":/resource/PinkPattern.png").scaled(163,163,Qt::KeepAspectRatio));
+    ui->LeftPattern->setPixmap(QPixmap(":/resource/GreenPattern.png").scaled(103,103,Qt::KeepAspectRatio));
+    ui->MiddlePattern->setPixmap(QPixmap(":/resource/OrangePattern.png").scaled(103,103,Qt::KeepAspectRatio));
+    ui->RightPattern->setPixmap(QPixmap(":/resource/PinkPattern.png").scaled(163,163,Qt::KeepAspectRatio));
     ui->button1->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
     ui->button2->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
     ui->button3->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
@@ -177,4 +178,18 @@ void MainWindow::unflashSelectedButtons()
     ui->button8->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
     ui->button9->setStyleSheet( QString("QPushButton {background-color: rgb(255,255,255); QPushButton:pressed background-color: rgb(205,205,205); border: none;}"));
 }
+
+/**
+ * @brief MainWindow::updateImages Update the 3 pattern images to reflect the queued and current moves
+ * @param image1
+ * @param image2
+ * @param image3
+ */
+void MainWindow::updateImages(QPixmap image1, QPixmap image2, QPixmap image3)
+{
+    ui->LeftPattern->setPixmap(image1.scaled(103,103,Qt::KeepAspectRatio));
+    ui->MiddlePattern->setPixmap(image2.scaled(103,103,Qt::KeepAspectRatio));
+    ui->RightPattern->setPixmap(image3.scaled(163,163,Qt::KeepAspectRatio));
+}
+
 

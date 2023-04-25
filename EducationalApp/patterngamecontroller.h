@@ -7,6 +7,7 @@
 #include <Box2D/Box2D.h>
 #include <QTimer>
 #include <queue>
+#include <map>
 
 using std::set;
 using std::cout;
@@ -14,6 +15,7 @@ using std::endl;
 using std::vector;
 using std::rand;
 using std::queue;
+using std::map;
 
 class PatternGameController : public QWidget
 {
@@ -25,6 +27,7 @@ public:
 signals:
     void clearButtons();
     void flashSelectedButtons(QString);
+    void updateImages(QPixmap, QPixmap, QPixmap);
 
 
 public slots:
@@ -56,7 +59,12 @@ private:
     set<int> purplePattern;
     set<int> yellowPattern;
 
-    queue<int> queuedPatterns;
+    vector<int> queuedPatterns;
+
+    map<int, set<int>> patternMapping;
+    map<int, QString> colorMapping;
+    map<int, QPixmap> imageMapping;
+
 
     QImage greenImage;
     QImage pinkImage;
@@ -68,6 +76,7 @@ private:
     void createProteins(int count);
     void createBacteria(int count);
     bool compareSets(set<int>* , set<int>*);
+    void updateDisplayedPatterns();
 };
 
 #endif // PATTERNGAMECONTROLLER_H
