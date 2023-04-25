@@ -14,5 +14,9 @@
         <file>GreenPattern.png</file>
         <file>OrangePattern.png</file>
         <file>PinkPattern.png</file>
+        <file>BluePattern.png</file>
+        <file>LightBluePattern.png</file>
+        <file>PurplePattern.png</file>
+        <file>YellowPattern.png</file>
     </qresource>
 </RCC>
