@@ -22,5 +22,7 @@
         <file>DrCatDog1.png</file>
         <file>DrCatDog2.png</file>
         <file>ProteinSprite.png</file>
+        <file>dialogueBox.png</file>
+        <file>darkness.png</file>
     </qresource>
 </RCC>

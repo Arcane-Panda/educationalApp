@@ -325,6 +325,70 @@
          </rect>
         </property>
        </widget>
+       <widget class="QLabel" name="darkness">
+        <property name="geometry">
+         <rect>
+          <x>-30</x>
+          <y>-60</y>
+          <width>1591</width>
+          <height>1011</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="dialogueBox">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>510</y>
+          <width>1300</width>
+          <height>275</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="drCatDog">
+        <property name="geometry">
+         <rect>
+          <x>480</x>
+          <y>0</y>
+          <width>871</width>
+          <height>512</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="dialogueLabel">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>510</y>
+          <width>1300</width>
+          <height>275</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Roboto</family>
+          <pointsize>24</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="Level2">
        <widget class="PhagocyteWidget" name="MazePhagocyte" native="true">
@@ -360,7 +424,7 @@
      <x>0</x>
      <y>0</y>
      <width>1400</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

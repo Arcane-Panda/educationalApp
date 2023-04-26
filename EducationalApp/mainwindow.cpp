@@ -24,6 +24,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->MazePhagocyte->showMaximized();
     ui->stackedWidget->setCurrentIndex(1);
 
+    ui->darkness->setPixmap(QPixmap(":/resource/darkness.png"));
+    ui->darkness->setGeometry(QRect(0,0,1400,1400));
+    ui->dialogueBox->setPixmap(QPixmap(":/resource/dialogueBox.png"));
+    ui->drCatDog->setPixmap(QPixmap(":/resource/DrCatDog1.png"));
+    ui->dialogueLabel->setText("It's me Dr. CatDog");
+   //ui->dialogueBox->hide();
+
     // TODO Remove this and add to when change to level 2
     //ui->Level3Phagocyte->setupLevel3();
     //ui->MazePhagocyte->setupLevel2();
