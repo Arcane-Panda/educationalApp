@@ -67,25 +67,12 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     bacteriaImg[1] = QImage(":/resource/Bacteria2.png");
     bacteriaImg[2] = QImage(":/resource/Bacteria3.png");
 
-    // Timer
-    connect(&timer, &QTimer::timeout, this, &PhagocyteWidget::updateWorld);
-    timer.start(17);
+
 }
 
-/**
- * @brief PhagocyteWidget::changeBackground Changes the background image of the window
- * @param fileName The background image file
- */
-void PhagocyteWidget::changeBackground(QString fileName)
+void PhagocyteWidget::startLevel2()
 {
-    backgroundBlood = QImage(fileName);
-}
-
-/**
- * @brief PhagocyteWidget::setupLevel2 Adds level 2 game objects to the widget
- */
-void PhagocyteWidget::setupLevel2()
-{
+    cout << "starting level 2" << endl;
     // Draw maze borders
     QFile mazeFile(QString(":/resource/maze.json"));
     if(mazeFile.open(QIODevice::ReadOnly))
@@ -112,12 +99,13 @@ void PhagocyteWidget::setupLevel2()
             this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
         }
     }
+
+    // Timer
+    connect(&timer, &QTimer::timeout, this, &PhagocyteWidget::updateWorld);
+    timer.start(17);
 }
 
-/**
- * @brief PhagocyteWidget::setupLevel3 Adds level 3 game objects into the widget
- */
-void PhagocyteWidget::setupLevel3()
+void PhagocyteWidget::startLevel3()
 {
     // Define game boundaries
     int borderWallInfo[4][4] {{700, 0, 1400, 10}, {0, 400,10, 800}, {700, 772, 1400, 10}, {1372, 400, 10, 800}};
@@ -164,8 +152,21 @@ void PhagocyteWidget::setupLevel3()
         }
     }
 
-
+    // Timer
+    connect(&timer, &QTimer::timeout, this, &PhagocyteWidget::updateWorld);
+    timer.start(17);
 }
+
+/**
+ * @brief PhagocyteWidget::changeBackground Changes the background image of the window
+ * @param fileName The background image file
+ */
+void PhagocyteWidget::changeBackground(QString fileName)
+{
+    backgroundBlood = QImage(fileName);
+}
+
+
 
 /**
  * @brief PhagocyteWidget::paintEvent Re-validates properties
@@ -211,7 +212,7 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
 
     //Fog of War
     //put an if around this?
-    painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
+   // painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
 }
 
@@ -220,6 +221,7 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
  */
 void PhagocyteWidget::updateWorld()
 {
+
     // User Input Deciphering
     if(aKeyDown)
     {
@@ -260,6 +262,16 @@ void PhagocyteWidget::updateWorld()
     // It is generally best to keep the time step and iterations fixed.
     world.Step(1.0/60.0, 6, 2);
     update();
+
+    if(body->GetPosition().x > 1400)
+    {
+        emit level2Complete();
+        timer.stop();
+    } else if(walls.size() == 4 && bacteria.empty())
+    {
+        emit level3Complete();
+        timer.stop();
+    }
 }
 
 /**

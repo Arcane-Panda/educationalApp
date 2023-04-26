@@ -32,11 +32,15 @@ public:
     void setupLevel3();
     void changeBackground(QString fileName);
 signals:
+    void level2Complete();
+    void level3Complete();
 
 public slots:
     void updateWorld();
     void keyDown(Qt::Key);
     void keyUp(Qt::Key);
+    void startLevel2();
+    void startLevel3();
 
 private:
     b2World world;

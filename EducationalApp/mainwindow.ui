@@ -325,7 +325,7 @@
          </rect>
         </property>
        </widget>
-       <widget class="QLabel" name="darkness">
+       <widget class="QLabel" name="darknessLevel1">
         <property name="geometry">
          <rect>
           <x>-30</x>
@@ -338,7 +338,7 @@
          <string>TextLabel</string>
         </property>
        </widget>
-       <widget class="QLabel" name="dialogueBox">
+       <widget class="QLabel" name="dialogueBoxLevel1">
         <property name="geometry">
          <rect>
           <x>40</x>
@@ -351,11 +351,11 @@
          <string>TextLabel</string>
         </property>
        </widget>
-       <widget class="QLabel" name="drCatDog">
+       <widget class="QLabel" name="drCatDogLevel1">
         <property name="geometry">
          <rect>
-          <x>480</x>
-          <y>0</y>
+          <x>470</x>
+          <y>10</y>
           <width>871</width>
           <height>512</height>
          </rect>
@@ -364,7 +364,7 @@
          <string>TextLabel</string>
         </property>
        </widget>
-       <widget class="QLabel" name="dialogueLabel">
+       <widget class="QLabel" name="dialogueLabelLevel1">
         <property name="geometry">
          <rect>
           <x>40</x>
@@ -400,6 +400,74 @@
           <height>777</height>
          </rect>
         </property>
+        <widget class="QLabel" name="drCatDogLevel2">
+         <property name="geometry">
+          <rect>
+           <x>470</x>
+           <y>10</y>
+           <width>871</width>
+           <height>512</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="darknessLevel2">
+         <property name="geometry">
+          <rect>
+           <x>1100</x>
+           <y>330</y>
+           <width>1591</width>
+           <height>1011</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="dialogueLabelLevel2">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>510</y>
+           <width>1300</width>
+           <height>275</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QLabel" name="dialogueBoxLevel2">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>510</y>
+           <width>1300</width>
+           <height>275</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+        <zorder>darknessLevel2</zorder>
+        <zorder>dialogueBoxLevel2</zorder>
+        <zorder>dialogueLabelLevel2</zorder>
+        <zorder>drCatDogLevel2</zorder>
        </widget>
       </widget>
       <widget class="QWidget" name="Level3">
@@ -412,6 +480,74 @@
           <height>777</height>
          </rect>
         </property>
+        <widget class="QLabel" name="drCatDogLevel3">
+         <property name="geometry">
+          <rect>
+           <x>470</x>
+           <y>10</y>
+           <width>871</width>
+           <height>512</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="darknessLevel3">
+         <property name="geometry">
+          <rect>
+           <x>1350</x>
+           <y>360</y>
+           <width>1591</width>
+           <height>1011</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="dialogueLabelLevel3">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>510</y>
+           <width>1300</width>
+           <height>275</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QLabel" name="dialogueBoxLevel3">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>510</y>
+           <width>1300</width>
+           <height>275</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+        <zorder>darknessLevel3</zorder>
+        <zorder>drCatDogLevel3</zorder>
+        <zorder>dialogueBoxLevel3</zorder>
+        <zorder>dialogueLabelLevel3</zorder>
        </widget>
       </widget>
      </widget>

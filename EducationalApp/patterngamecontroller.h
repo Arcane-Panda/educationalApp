@@ -28,7 +28,7 @@ signals:
     void clearButtons();
     void flashSelectedButtons(QString);
     void updateImages(QPixmap, QPixmap, QPixmap);
-
+    void level1Complete();
 
 public slots:
     void updateWorld();
@@ -44,6 +44,8 @@ public slots:
 
     void checkPattern(bool);
     void updateEntered(int, bool);
+
+    void startLevel1();
 
 
 private:

@@ -64,10 +64,13 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     framesTillNextSpawn = 300;
     bacteriaWave = 0;
     score = 100;
+
+}
+void PatternGameController::startLevel1()
+{
     connect(&timer, &QTimer::timeout, this, &PatternGameController::updateWorld);
     timer.start(17);
 }
-
 void PatternGameController::checkPattern(bool pushed)
 {
 
@@ -189,6 +192,12 @@ void PatternGameController::createBacteria(int count)
         bacteriaBody->CreateFixture(&fixtureDef);
 
         this->bacterium.push_back(bacteriaBody);
+    }
+
+    if(bacterium.size() > 5)
+    {
+        emit level1Complete();
+        timer.stop();
     }
 }
 
