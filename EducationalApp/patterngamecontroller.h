@@ -17,7 +17,7 @@ using std::rand;
 using std::queue;
 using std::map;
 
-class PatternGameController : public QWidget
+class PatternGameController : public QWidget, public b2ContactListener
 {
     Q_OBJECT
 public:
@@ -49,6 +49,7 @@ public slots:
 
 
 private:
+    virtual void BeginContact(b2Contact*);
     vector<b2Body*> bacterium;
     vector<b2Body*> proteins;
     b2World world;
@@ -62,6 +63,8 @@ private:
     set<int> yellowPattern;
 
     vector<int> queuedPatterns;
+    vector<b2Body*> bacteriaToRemove;
+    vector<b2Body*> proteinsToRemove;
 
     QImage bacteriaImage;
     QImage defendCellImage;

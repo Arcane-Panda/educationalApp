@@ -65,6 +65,7 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     bacteriaWave = 0;
     score = 100;
 
+    world.SetContactListener(this);
 }
 void PatternGameController::startLevel1()
 {
@@ -194,7 +195,7 @@ void PatternGameController::createBacteria(int count)
         this->bacterium.push_back(bacteriaBody);
     }
 
-    if(bacterium.size() > 5)
+    if(bacterium.size() > 10)
     {
         emit level1Complete();
         timer.stop();
@@ -229,44 +230,35 @@ void PatternGameController::createProteins(int count)
 void PatternGameController::updateWorld()
 {
     // Move All Bacteria Towards the cell (don't if it has been marked with proteins)
-
-    getOutOfCurrentBacteria:
     for(b2Body* bacteriaBody : bacterium)
     {
         b2Vec2 center = b2Vec2(340, 340);
         b2Vec2 forceVec = b2Vec2(center.x - bacteriaBody->GetPosition().x, center.y - bacteriaBody->GetPosition().y);
         bacteriaBody->ApplyForceToCenter(forceVec, true);
-
-        int bacteriaKey;
-
-        for(int i = 0; i < (int)bacterium.size(); i++)
-        {
-            if(bacterium[i] == bacteriaBody)
-            {
-                bacteriaKey = i;
-            }
-        }
-
-        for(b2ContactEdge* edge = bacteriaBody->GetContactList(); edge; edge = edge->next)
-        {
-            b2Body* collideBody = edge->contact->GetFixtureA()->GetBody();
-            for(int i = 0; i < (int)proteins.size(); i++)
-            {
-                if(proteins[i] == collideBody)
-                {
-                    proteins.erase(proteins.begin()+i);
-                    world.DestroyBody(collideBody);
-                    bacterium.erase(bacterium.begin()+bacteriaKey);
-                    world.DestroyBody(bacteriaBody);
-                    goto getOutOfCurrentBacteria;
-                }
-            }
-        }
     }
 
-    // Check for collisions between every bacteria and protein TODO
+    // Remove every protein that should be removed, both from the world and from the array of them
+        for(b2Body* proteinToRemove: proteinsToRemove)
+        {
+            vector<b2Body*>::iterator it = std::find(proteins.begin(), proteins.end(), proteinToRemove);
+            if(it != proteins.end())
+            {
+                proteins.erase(it);
+                world.DestroyBody(proteinToRemove);
+            }
+        }
+        proteinsToRemove.clear();
 
-
+        for(b2Body* bacteriumToRemove: bacteriaToRemove)
+        {
+            vector<b2Body*>::iterator it = std::find(bacterium.begin(), bacterium.end(), bacteriumToRemove);
+            if(it != bacterium.end())
+            {
+                bacterium.erase(it);
+                world.DestroyBody(bacteriumToRemove);
+            }
+        }
+        bacteriaToRemove.clear();
 
     // It is generally best to keep the time step and iterations fixed.
     world.Step(1.0/60.0, 6, 2);
@@ -311,6 +303,25 @@ void PatternGameController::paintEvent(QPaintEvent *)
     painter.drawImage(QRect(310, 310, 60, 60), defendCellImage);
 
     painter.end();
+}
+
+void PatternGameController::BeginContact(b2Contact* contact)
+{
+    b2Body* bodyA = contact->GetFixtureA()->GetBody();
+    b2Body* bodyB = contact->GetFixtureB()->GetBody();
+
+    if(bodyA->GetFixtureList()->GetShape()->m_radius == 5.0f && bodyB->GetFixtureList()->GetShape()->m_radius == 20.0f)
+    {
+        // in this case, bodyA is a protein and bodyB is a bacterium:
+        proteinsToRemove.push_back(bodyA);
+        bacteriaToRemove.push_back(bodyB);
+    }
+    else if(bodyA->GetFixtureList()->GetShape()->m_radius == 20.0f && bodyB->GetFixtureList()->GetShape()->m_radius == 5.0f)
+    {
+        // in this case, bodyA is a baterium and bodyB is a protein:
+        bacteriaToRemove.push_back(bodyA);
+        proteinsToRemove.push_back(bodyB);
+    }
 }
 
 /**

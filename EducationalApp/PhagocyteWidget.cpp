@@ -66,8 +66,6 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     bacteriaImg[0] = QImage(":/resource/Bacteria1.png");
     bacteriaImg[1] = QImage(":/resource/Bacteria2.png");
     bacteriaImg[2] = QImage(":/resource/Bacteria3.png");
-
-
 }
 
 /**
