@@ -24,19 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->MazePhagocyte->showMaximized();
     ui->stackedWidget->setCurrentIndex(1);
 
-
-
-
-
-
-    //ui->dialogueBox->hide();
-
-    // TODO Remove this and add to when change to level 2
-    //ui->Level3Phagocyte->setupLevel3();
-    //ui->MazePhagocyte->setupLevel2();
-    ui->Level3Phagocyte->changeBackground(":/resource/internalBloodVessel.png");
-    // Setup player movement connections
-
     //LEVEL 1 SETUP-------------
     connect(ui->button1, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed1);
     connect(ui->button2, &QPushButton::clicked, ui->PatternGameDisplay, &PatternGameController::buttonPushed2);
@@ -125,6 +112,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::keyUp, ui->Level3Phagocyte, &PhagocyteWidget::keyUp);
     connect(this, &MainWindow::startLevel3, ui->Level3Phagocyte, &PhagocyteWidget::startLevel3);
     connect(ui->Level3Phagocyte, &PhagocyteWidget::level3Complete, this, &MainWindow::level3Complete);
+    ui->Level3Phagocyte->changeBackground(":/resource/internalBloodVessel.png");
 }
 
 /**
@@ -136,7 +124,7 @@ MainWindow::~MainWindow()
 }
 
 /**
- * @brief MainWindow::keyPressEvent Emits a signal when WASD are pressed
+ * @brief MainWindow::keyPressEvent Emits a signal when keys are pressed
  * @param event Holds the information of which key was pressed
  */
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -144,7 +132,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     switch (event->key())
     {
     case Qt::Key_W:
-        cout << "hitting w" << endl;
         emit keyDown(Qt::Key_W);
         break;
     case Qt::Key_A:
@@ -156,6 +143,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     case Qt::Key_D:
         emit keyDown(Qt::Key_D);
         break;
+
     case Qt::Key_Q:
         advanceDialogue();
         break;
@@ -165,7 +153,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
-
+/**
+ * @brief MainWindow::advanceDialogue Advances the dialogue being displayed if the game is in a state to do so
+ */
 void MainWindow::advanceDialogue()
 {
     switch(currentState)
@@ -184,6 +174,7 @@ void MainWindow::advanceDialogue()
             ui->dialogueLabelLevel1->hide();
             ui->dialogueBoxLevel1->hide();
             ui->drCatDogLevel1->hide();
+
             emit startLevel1();
             dialogueIndex = 0;
             currentState = Playing;
@@ -204,11 +195,11 @@ void MainWindow::advanceDialogue()
             ui->dialogueLabelLevel1->hide();
             ui->dialogueBoxLevel1->hide();
             ui->drCatDogLevel1->hide();
+
             ui->stackedWidget->setCurrentIndex(2);
             dialogueIndex = 0;
             currentState = Level2Start;
 
-            cout << "should be displaying level 2 UI" << endl;
             ui->darknessLevel2->show();
             ui->dialogueLabelLevel2->show();
             ui->dialogueBoxLevel2->show();
@@ -221,7 +212,6 @@ void MainWindow::advanceDialogue()
 
         if(dialogueIndex < (int)level2StartDialogue.size() - 1)
         {
-            cout << "we advancing the level 2 dialogue" << endl;
             //advance to next string
             dialogueIndex++;
             ui->dialogueLabelLevel2->setText(level2StartDialogue[dialogueIndex]);
@@ -232,6 +222,7 @@ void MainWindow::advanceDialogue()
             ui->dialogueLabelLevel2->hide();
             ui->dialogueBoxLevel2->hide();
             ui->drCatDogLevel2->hide();
+
             dialogueIndex = 0;
             currentState = Playing;
             emit startLevel2();
@@ -252,11 +243,11 @@ void MainWindow::advanceDialogue()
             ui->dialogueLabelLevel2->hide();
             ui->dialogueBoxLevel2->hide();
             ui->drCatDogLevel2->hide();
+
             ui->stackedWidget->setCurrentIndex(3);
             dialogueIndex = 0;
             currentState = Level3Start;
 
-            cout << "should be displaying level 2 UI" << endl;
             ui->darknessLevel3->show();
             ui->dialogueLabelLevel3->show();
             ui->dialogueBoxLevel3->show();
@@ -269,7 +260,6 @@ void MainWindow::advanceDialogue()
 
         if(dialogueIndex < (int)level3StartDialogue.size() - 1)
         {
-            cout << "we advancing the level 3 dialogue" << endl;
             //advance to next string
             dialogueIndex++;
             ui->dialogueLabelLevel3->setText(level3StartDialogue[dialogueIndex]);
@@ -280,6 +270,7 @@ void MainWindow::advanceDialogue()
             ui->dialogueLabelLevel3->hide();
             ui->dialogueBoxLevel3->hide();
             ui->drCatDogLevel3->hide();
+
             dialogueIndex = 0;
             currentState = Playing;
             emit startLevel3();
@@ -307,6 +298,10 @@ void MainWindow::advanceDialogue()
 
 }
 
+/**
+ * @brief MainWindow::level1Complete Slot that displays the text dialogue and sets the state
+ * to the end of the level when we recieve the signal that level 1 has been completed
+ */
 void MainWindow::level1Complete()
 {
     currentState = Level1End;
@@ -317,6 +312,10 @@ void MainWindow::level1Complete()
     ui->dialogueLabelLevel1->setText(level1EndDialogue[dialogueIndex]);
 }
 
+/**
+ * @brief MainWindow::level2Complete Slot that displays the text dialogue and sets the state
+ * to the end of the level when we recieve the signal that level 2 has been completed
+ */
 void MainWindow::level2Complete()
 {
     currentState = Level2End;
@@ -327,6 +326,10 @@ void MainWindow::level2Complete()
     ui->dialogueLabelLevel2->setText(level2EndDialogue[dialogueIndex]);
 }
 
+/**
+ * @brief MainWindow::level3Complete Slot that displays the text dialogue and sets the state
+ * to the end of the level when we recieve the signal that level 3 has been completed
+ */
 void MainWindow::level3Complete()
 {
     currentState = Level3End;
@@ -336,6 +339,7 @@ void MainWindow::level3Complete()
     ui->drCatDogLevel3->show();
     ui->dialogueLabelLevel3->setText(level3EndDialogue[dialogueIndex]);
 }
+
 /**
  * @brief MainWindow::keyReleaseEvent Emits a signal when WASD are released
  * @param event Holds the information of which key was released
