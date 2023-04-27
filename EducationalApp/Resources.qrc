@@ -24,5 +24,6 @@
         <file>ProteinSprite.png</file>
         <file>dialogueBox.png</file>
         <file>darkness.png</file>
+        <file>Bacteria.png</file>
     </qresource>
 </RCC>

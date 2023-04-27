@@ -40,7 +40,7 @@ PatternGameController::PatternGameController(QWidget *parent) : QWidget(parent),
     imageMapping[5] = QPixmap(QString(":/resource/PurplePattern.png"));
     imageMapping[6] = QPixmap(QString(":/resource/YellowPattern.png"));
 
-    bacteriaImage = QImage(":/resource/Bacteria1.png");
+    bacteriaImage = QImage(":/resource/Bacteria.png");
     defendCellImage = QImage(":/resource/Cell.png");
     c3ProteinImage = QImage(":/resource/ProteinSprite.png");
 
