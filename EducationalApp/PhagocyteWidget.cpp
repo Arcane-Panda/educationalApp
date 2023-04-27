@@ -70,9 +70,11 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
 
 }
 
+/**
+ * @brief PhagocyteWidget::startLevel2 Does the necessary setup for level 2 and starts the world update timer
+ */
 void PhagocyteWidget::startLevel2()
 {
-    cout << "starting level 2" << endl;
     // Draw maze borders
     QFile mazeFile(QString(":/resource/maze.json"));
     if(mazeFile.open(QIODevice::ReadOnly))
@@ -105,6 +107,9 @@ void PhagocyteWidget::startLevel2()
     timer.start(17);
 }
 
+/**
+ * @brief PhagocyteWidget::startLevel3 Does the necessary setup for level 3 and starts the world update timer
+ */
 void PhagocyteWidget::startLevel3()
 {
     // Define game boundaries
@@ -207,12 +212,11 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
     //Draw Walls
     for(QRect wall: walls)
     {
-        painter.fillRect(wall, QBrush(Qt::yellow));
+        painter.fillRect(wall, QBrush(Qt::red));
     }
 
     //Fog of War
-    //put an if around this?
-   // painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
+    painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
 }
 
@@ -263,6 +267,7 @@ void PhagocyteWidget::updateWorld()
     world.Step(1.0/60.0, 6, 2);
     update();
 
+    //check level completion conditions
     if(body->GetPosition().x > 1400)
     {
         emit level2Complete();

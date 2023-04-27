@@ -389,6 +389,38 @@
          <bool>true</bool>
         </property>
        </widget>
+       <widget class="QLabel" name="background">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>40</y>
+          <width>680</width>
+          <height>680</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="lineWidth">
+         <number>4</number>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <zorder>background</zorder>
+       <zorder>gridLayoutWidget</zorder>
+       <zorder>LeftPattern</zorder>
+       <zorder>line</zorder>
+       <zorder>fireButton</zorder>
+       <zorder>GameDisplay</zorder>
+       <zorder>MiddlePattern</zorder>
+       <zorder>RightPattern</zorder>
+       <zorder>PatternGameDisplay</zorder>
+       <zorder>darknessLevel1</zorder>
+       <zorder>dialogueBoxLevel1</zorder>
+       <zorder>drCatDogLevel1</zorder>
+       <zorder>dialogueLabelLevel1</zorder>
       </widget>
       <widget class="QWidget" name="Level2">
        <widget class="PhagocyteWidget" name="MazePhagocyte" native="true">

@@ -54,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent)
     level1EndDialogue.push_back("The little red dots you see coming off of them is called C3a while the part that remains attached to the bacteria is C3b. C3a goes and floats freely in our vascular system.");
     level1EndDialogue.push_back(" Let's follow where the C3a proteins go! ");
 
+    ui->background->setPixmap(QPixmap(":/resource/internalBloodVessel.png"));
     ui->darknessLevel1->setPixmap(QPixmap(":/resource/darkness.png"));
     ui->darknessLevel1->setGeometry(QRect(0,0,1400,1400));
     ui->dialogueBoxLevel1->setPixmap(QPixmap(":/resource/dialogueBox.png").scaled(1300,275,Qt::KeepAspectRatio));
