@@ -149,7 +149,7 @@ void PatternGameController::createBacteria(int count)
         // create a b2Body for each bacterium being spawned, at a random
         // angle around the cell being defended.
         b2BodyDef bacteriaBodyDef;
-        int angle = (arc4random_uniform(361u));
+        int angle = (rand() * 360.0);
         bacteriaBodyDef.position.Set(340 + 330 * cos(angle), 340 + 330 * sin(angle));
         bacteriaBodyDef.type = b2_dynamicBody;
         b2Body* bacteriaBody = world.CreateBody(&bacteriaBodyDef);
@@ -178,7 +178,7 @@ void PatternGameController::createProteins(int count)
         // create a b2Body for each protein being spawned, at a random
         // angle around the cell being defended.
         b2BodyDef proteinBodyDef;
-        int angle = (arc4random_uniform(361u));
+        int angle = (rand() * 360.0);
         proteinBodyDef.position.Set(340 + 35 * cos(angle), 340 + 35 * sin(angle));
         proteinBodyDef.type = b2_dynamicBody;
         b2Body* proteinBody = world.CreateBody(&proteinBodyDef);
@@ -239,7 +239,7 @@ void PatternGameController::updateWorld()
     if (framesTillNextSpawn < 0)
     {
         framesTillNextSpawn = 300;
-        bacteriaWave += arc4random_uniform(2u);
+        bacteriaWave += rand() % 2;
         createBacteria(bacteriaWave);
     }
 

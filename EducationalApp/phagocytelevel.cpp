@@ -147,7 +147,7 @@ void PhagocyteLevel::startLevel3()
 
             // add the current bacterium to the master list and give it a random rotation
             this->bacteria.push_back(bacteriumBody);
-            bacteriumBody->SetTransform(bacteriumBody->GetPosition(), arc4random_uniform(361u));
+            bacteriumBody->SetTransform(bacteriumBody->GetPosition(), rand() * 360.0);
         }
     }
 
