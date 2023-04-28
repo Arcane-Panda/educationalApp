@@ -6,8 +6,8 @@
  * Code Style Review by:
  */
 
-#ifndef PHAGOCYTEWIDGET_H
-#define PHAGOCYTEWIDGET_H
+#ifndef PHAGOCYTELEVEL_H
+#define PHAGOCYTELEVEL_H
 
 #include <QWidget>
 #include <Box2D/Box2D.h>
@@ -22,11 +22,11 @@
 using std::tuple;
 using std::vector;
 
-class PhagocyteWidget : public QWidget
+class PhagocyteLevel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PhagocyteWidget(QWidget *parent = nullptr);
+    explicit PhagocyteLevel(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *);
     void setupLevel2();
     void setupLevel3();
@@ -43,15 +43,16 @@ public slots:
     void startLevel3();
 
 private:
+    void addWallsFromFile(QString);
     b2World world;
-    b2Body* body;
+    b2Body* phagocyteBody;
     vector<QRect> walls;
     vector<b2Body*> bacteria;
     QTimer timer;
     QImage phagocyteImg[3];
     QImage bacteriaImg[3];
     QImage visionImg;
-    QImage backgroundBlood;
+    QImage backgroundImg;
     bool wKeyDown;
     bool aKeyDown;
     bool sKeyDown;
@@ -62,4 +63,4 @@ private:
 
 };
 
-#endif // PHAGOCYTEWIDGET_H
+#endif // PHAGOCYTELEVEL_H

@@ -42,7 +42,7 @@ public slots:
     void buttonPushed8(bool);
     void buttonPushed9(bool);
 
-    void checkPattern(bool);
+    void checkPattern();
     void updateEntered(int, bool);
 
     void startLevel1();
@@ -50,7 +50,7 @@ public slots:
 
 private:
     virtual void BeginContact(b2Contact*);
-    vector<b2Body*> bacterium;
+    vector<b2Body*> bacteria;
     vector<b2Body*> proteins;
     b2World world;
     set<int> entered;
@@ -66,7 +66,7 @@ private:
     vector<b2Body*> bacteriaToRemove;
     vector<b2Body*> proteinsToRemove;
 
-    QImage bacteriaImage;
+    QImage bacteriumImage;
     QImage defendCellImage;
     QImage c3ProteinImage;
 
@@ -77,7 +77,6 @@ private:
     QTimer timer;
     int framesTillNextSpawn;
     int bacteriaWave;
-    int score;
     void createProteins(int count);
     void createBacteria(int count);
     bool compareSets(set<int>* , set<int>*);

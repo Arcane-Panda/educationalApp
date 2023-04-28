@@ -1,11 +1,9 @@
 /***
  * Alex Tokita, Andrew Hokanson, Austin Li, Jonah Thomas, and Lucas Zagal
  * CS3505 - A8 Educational App
- * 18 April 2023
+ * 27 April 2023
  *
- * This class holds the methods
- *
- * Code Style Review by:
+ * Main class for the Complement system educational app. Creates the MainWindow.
  */
 
 #include "mainwindow.h"
@@ -15,7 +13,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    //w.setWindowState(Qt::WindowMaximized);
     w.show();
     return a.exec();
 }

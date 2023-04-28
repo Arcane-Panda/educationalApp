@@ -1,11 +1,9 @@
 /***
  * Alex Tokita, Andrew Hokanson, Austin Li, Jonah Thomas, and Lucas Zagal
  * CS3505 - A8 Educational App
- * 18 April 2023
+ * 27 April 2023
  *
  * This class serves as the interface between the UI and the model code.
- *
- * Code Style Review by:
  */
 
 #include "mainwindow.h"
@@ -91,10 +89,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     level2EndDialogue.push_back("Great job! The C3a proteins have recruited a phagocyte.");
 
-    connect(this, &MainWindow::keyDown, ui->MazePhagocyte, &PhagocyteWidget::keyDown);
-    connect(this, &MainWindow::keyUp, ui->MazePhagocyte, &PhagocyteWidget::keyUp);
-    connect(this, &MainWindow::startLevel2, ui->MazePhagocyte, &PhagocyteWidget::startLevel2);
-    connect(ui->MazePhagocyte, &PhagocyteWidget::level2Complete, this, &MainWindow::level2Complete);
+    connect(this, &MainWindow::keyDown, ui->MazePhagocyte, &PhagocyteLevel::keyDown);
+    connect(this, &MainWindow::keyUp, ui->MazePhagocyte, &PhagocyteLevel::keyUp);
+    connect(this, &MainWindow::startLevel2, ui->MazePhagocyte, &PhagocyteLevel::startLevel2);
+    connect(ui->MazePhagocyte, &PhagocyteLevel::level2Complete, this, &MainWindow::level2Complete);
 
     //LEVEL 3 SETUP ---------------------------------------
     ui->darknessLevel3->setPixmap(QPixmap(":/resource/darkness.png"));
@@ -109,10 +107,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     level3EndDialogue.push_back("Great job! Thanks to the work of the Complement System, the threat has been dealt with and our body stays healthy.");
 
-    connect(this, &MainWindow::keyDown, ui->Level3Phagocyte, &PhagocyteWidget::keyDown);
-    connect(this, &MainWindow::keyUp, ui->Level3Phagocyte, &PhagocyteWidget::keyUp);
-    connect(this, &MainWindow::startLevel3, ui->Level3Phagocyte, &PhagocyteWidget::startLevel3);
-    connect(ui->Level3Phagocyte, &PhagocyteWidget::level3Complete, this, &MainWindow::level3Complete);
+    connect(this, &MainWindow::keyDown, ui->Level3Phagocyte, &PhagocyteLevel::keyDown);
+    connect(this, &MainWindow::keyUp, ui->Level3Phagocyte, &PhagocyteLevel::keyUp);
+    connect(this, &MainWindow::startLevel3, ui->Level3Phagocyte, &PhagocyteLevel::startLevel3);
+    connect(ui->Level3Phagocyte, &PhagocyteLevel::level3Complete, this, &MainWindow::level3Complete);
     ui->Level3Phagocyte->changeBackground(":/resource/internalBloodVessel.png");
 }
 

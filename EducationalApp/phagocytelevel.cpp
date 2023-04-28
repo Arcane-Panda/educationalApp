@@ -1,14 +1,13 @@
 /***
  * Alex Tokita, Andrew Hokanson, Austin Li, Jonah Thomas, and Lucas Zagal
  * CS3505 - A8 Educational App
- * 18 April 2023
+ * 27 April 2023
  *
- * This class holds the methods for a functioning Phagocyte
- *
- * Code Style Review by: Austin
+ * This class serves as the model for a level featuring a moveable phagocyte— either
+ * with walls to avoid or with
  */
 
-#include "PhagocyteWidget.h"
+#include "PhagocyteLevel.h"
 #include <QPainter>
 #include <QDebug>
 #include <QRect>
@@ -17,21 +16,21 @@ using std::cout;
 using std::endl;
 
 /**
- * @brief PhagocyteWidget::PhagocyteWidget Constructor
+ * @brief PhagocyteLevel::PhagocyteLevel Constructor
  * @param parent
  */
-PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
+PhagocyteLevel::PhagocyteLevel(QWidget *parent) : QWidget(parent),
     world(b2Vec2(0.0f, 0.0f)),
     timer(this),
     visionImg(":/resource/vision.png"),
-    backgroundBlood(":/resource/bloodvessels.png")
+    backgroundImg(":/resource/bloodvessels.png")
 {
     // Define the dynamic body. We set its position and call the body factory.
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(50.0f, 450.0f);
 
-    body = world.CreateBody(&bodyDef);
+    phagocyteBody = world.CreateBody(&bodyDef);
 
     // Define another box shape for our dynamic body.
     b2CircleShape hitbox;
@@ -48,7 +47,7 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
     fixtureDef.friction = 50.0f;
     fixtureDef.restitution = 0.2;
     // Add the shape to the body.
-    body->CreateFixture(&fixtureDef);
+    phagocyteBody->CreateFixture(&fixtureDef);
 
     // Player Movement Initialization
     speed = 500;
@@ -69,19 +68,22 @@ PhagocyteWidget::PhagocyteWidget(QWidget *parent) : QWidget(parent),
 }
 
 /**
- * @brief PhagocyteWidget::startLevel2 Does the necessary setup for level 2 and starts the world update timer
+ * @brief PhagocyteLevel::addWallsFromFile adds walls to the level's world based on a json file
+ * that contains an array of 4-int-tuples, each of which represents a walls center x coordinate,
+ * center y coordinate, width, and height respectively.
+ * @param filename the name of the file from which to add walls
  */
-void PhagocyteWidget::startLevel2()
+void PhagocyteLevel::addWallsFromFile(QString filename)
 {
-    // Draw maze borders
-    QFile mazeFile(QString(":/resource/maze.json"));
-    if(mazeFile.open(QIODevice::ReadOnly))
+    QFile wallsFile(filename);
+    if(wallsFile.open(QIODevice::ReadOnly))
     {
-        // Read from mazeFile
-        QByteArray wallData = mazeFile.readAll();
-        QJsonDocument mazeDoc = QJsonDocument::fromJson(wallData);
-        QJsonArray walls = mazeDoc["maze"].toArray();
-        // Add in wall colliders for maze and add dimensions for drawing
+        // Read from wall
+        QByteArray wallData = wallsFile.readAll();
+        QJsonDocument wallsDoc = QJsonDocument::fromJson(wallData);
+        QJsonArray walls = wallsDoc["walls"].toArray();
+
+        // Add in colliders for each wall and add dimensions for drawing
         for(const QJsonValue &wall : walls)
         {
             int x = wall.toArray()[0].toInt();
@@ -99,35 +101,28 @@ void PhagocyteWidget::startLevel2()
             this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
         }
     }
+}
+
+/**
+ * @brief PhagocyteLevel::startLevel2 Does the necessary setup for level 2 and starts the world update timer
+ */
+void PhagocyteLevel::startLevel2()
+{
+    // add the maze walls to the world
+    addWallsFromFile(QString(":/resource/maze.json"));
 
     // Timer
-    connect(&timer, &QTimer::timeout, this, &PhagocyteWidget::updateWorld);
+    connect(&timer, &QTimer::timeout, this, &PhagocyteLevel::updateWorld);
     timer.start(17);
 }
 
 /**
- * @brief PhagocyteWidget::startLevel3 Does the necessary setup for level 3 and starts the world update timer
+ * @brief PhagocyteLevel::startLevel3 Does the necessary setup for level 3 and starts the world update timer
  */
-void PhagocyteWidget::startLevel3()
+void PhagocyteLevel::startLevel3()
 {
     // Define game boundaries
-    int borderWallInfo[4][4] {{700, 0, 1400, 10}, {0, 400,10, 800}, {700, 772, 1400, 10}, {1372, 400, 10, 800}};
-    for(int i = 0; i < 4; i++)
-    {
-        int x = borderWallInfo[i][0];
-        int y = borderWallInfo[i][1];
-        int w = borderWallInfo[i][2];
-        int h = borderWallInfo[i][3];
-
-        b2BodyDef wallBodyDef;
-        wallBodyDef.position.Set(x, y);
-        b2Body* wallBody = world.CreateBody(&wallBodyDef);
-        b2PolygonShape wallBox;
-        wallBox.SetAsBox(w/2, h/2);
-        wallBody->CreateFixture(&wallBox, 0.0f);
-
-        this->walls.push_back(QRect(x - w/2, y - h/2, w, h));
-    }
+    addWallsFromFile(QString(":/resource/borderwalls.json"));
 
     // Draw bacteria from JSON file
     QFile bacteriaFile(QString(":/resource/bacteria.json"));
@@ -143,38 +138,37 @@ void PhagocyteWidget::startLevel3()
             int x = bacterium.toArray()[0].toInt();
             int y = bacterium.toArray()[1].toInt();
 
-            b2BodyDef bacteriaBodyDef;
-            bacteriaBodyDef.position.Set(x+32, y+32);
-            b2Body* bacteriaBody = world.CreateBody(&bacteriaBodyDef);
+            b2BodyDef bacteriumBodyDef;
+            bacteriumBodyDef.position.Set(x+32, y+32);
+            b2Body* bacteriumBody = world.CreateBody(&bacteriumBodyDef);
             b2PolygonShape hitBox;
             hitBox.SetAsBox(8, 8);
-            bacteriaBody->CreateFixture(&hitBox, 0.0f);
+            bacteriumBody->CreateFixture(&hitBox, 0.0f);
 
-            this->bacteria.push_back(bacteriaBody);
-            bacteriaBody->SetTransform(bacteriaBody->GetPosition(), rand()%360);
+            // add the current bacterium to the master list and give it a random rotation
+            this->bacteria.push_back(bacteriumBody);
+            bacteriumBody->SetTransform(bacteriumBody->GetPosition(), arc4random_uniform(361u));
         }
     }
 
     // Timer
-    connect(&timer, &QTimer::timeout, this, &PhagocyteWidget::updateWorld);
+    connect(&timer, &QTimer::timeout, this, &PhagocyteLevel::updateWorld);
     timer.start(17);
 }
 
 /**
- * @brief PhagocyteWidget::changeBackground Changes the background image of the window
+ * @brief PhagocyteLevel::changeBackground Changes the background image of the window
  * @param fileName The background image file
  */
-void PhagocyteWidget::changeBackground(QString fileName)
+void PhagocyteLevel::changeBackground(QString fileName)
 {
-    backgroundBlood = QImage(fileName);
+    backgroundImg = QImage(fileName);
 }
 
-
-
 /**
- * @brief PhagocyteWidget::paintEvent Re-validates properties
+ * @brief PhagocyteLevel::paintEvent Repaints the world, including all walls, all bacteria, and the phagocyte
  */
-void PhagocyteWidget::paintEvent(QPaintEvent *)
+void PhagocyteLevel::paintEvent(QPaintEvent *)
 {
     // Define which animation frame to display -- sequence is 1,2,3,2,1,2,3,etc
     animationCounter++;
@@ -190,41 +184,41 @@ void PhagocyteWidget::paintEvent(QPaintEvent *)
 
     // Create a painter
     QPainter painter(this);
-    b2Vec2 position = body->GetPosition();
+    b2Vec2 position = phagocyteBody->GetPosition();
 
-    painter.drawImage(QRect(0, 0, 1400, 800), backgroundBlood);
+    painter.drawImage(QRect(0, 0, 1400, 800), backgroundImg);
 
-
-    //Draw Phagocyte
+    // Draw the phagocyte at its current rotation
     QImage rotatedImg = phagocyteImg[frameIndex].transformed(QTransform().rotate(angle));
     float width = 50 * (cos((fmod(abs(angle), 90.0f) / 180 * M_PI)) + sin((fmod(abs(angle), 90.0f) / 180 * M_PI)));
     painter.drawImage(QRect((int)(position.x) - width / 2, (int)(position.y) - width / 2, width, width), rotatedImg);
 
-    //Draw Bacteria
+    // Draw each bacterium
     for(b2Body* bacterium : bacteria)
     {
         b2Vec2 bacteriaPos = bacterium->GetPosition();
         rotatedImg = bacteriaImg[frameIndex].transformed(QTransform().rotate(bacterium->GetAngle()));
         painter.drawImage(QRect((int)(bacteriaPos.x)-32,  (int)(bacteriaPos.y)-32  , 64, 64), rotatedImg);
     }
-    //Draw Walls
+
+    // Draw the walls
     for(QRect wall: walls)
     {
         painter.fillRect(wall, QBrush(Qt::red));
     }
 
-    //Fog of War
+    // Draw the "Fog of War"
     painter.drawImage(QRect((int)(position.x) - 1500, (int)(position.y) - 1500, 3000, 3000), visionImg);
     painter.end();
 }
 
 /**
- * @brief PhagocyteWidget::updateWorld
+ * @brief PhagocyteLevel::updateWorld updates the world, including applying forces to bodies, registering
+ * user input, and
  */
-void PhagocyteWidget::updateWorld()
+void PhagocyteLevel::updateWorld()
 {
-
-    // User Input Deciphering
+    // Update phagocyte angle based on player input
     if(aKeyDown)
     {
         angle -= 2;
@@ -235,19 +229,21 @@ void PhagocyteWidget::updateWorld()
     }
     angle = fmod(angle, 360.0f);
 
+    // Apply forces to phagocyte based on player input
     if(wKeyDown)
     {
         b2Vec2 forceVec = b2Vec2(speed * cos(angle * M_PI/180), speed * sin(angle * M_PI/180));
-        body->ApplyForceToCenter(forceVec, true);
+        phagocyteBody->ApplyForceToCenter(forceVec, true);
     }
     else if(sKeyDown)
     {
         b2Vec2 forceVec = b2Vec2(-speed * cos(angle * M_PI/180), -speed * sin(angle * M_PI/180));
-        body->ApplyForceToCenter(forceVec, true);
+        phagocyteBody->ApplyForceToCenter(forceVec, true);
     }
 
-    //check collisions
-    for(b2ContactEdge* edge = body->GetContactList(); edge; edge = edge->next)
+    // Check for any collisions between the phagocyte and the bacteria,
+    // consuming any bacteria that do collide
+    for(b2ContactEdge* edge = phagocyteBody->GetContactList(); edge; edge = edge->next)
     {
         b2Body* bacteriaBody = edge->contact->GetFixtureA()->GetBody();
         for(int i = 0; i < (int)bacteria.size(); i++)
@@ -260,13 +256,12 @@ void PhagocyteWidget::updateWorld()
         }
     }
 
-
-    // It is generally best to keep the time step and iterations fixed.
+    // Advance the world at a fixed time step and iterations
     world.Step(1.0/60.0, 6, 2);
-    update();
+    update(); // trigger repainting
 
-    //check level completion conditions
-    if(body->GetPosition().x > 1400)
+    // Check level completion conditions
+    if(phagocyteBody->GetPosition().x > 1400)
     {
         emit level2Complete();
         timer.stop();
@@ -278,10 +273,10 @@ void PhagocyteWidget::updateWorld()
 }
 
 /**
- * @brief PhagocyteWidget::keyDown Updates the widgets WASD key pressed states (pressed)
+ * @brief PhagocyteLevel::keyDown Updates the widgets WASD key pressed states (pressed)
  * @param key
  */
-void PhagocyteWidget::keyDown(Qt::Key key)
+void PhagocyteLevel::keyDown(Qt::Key key)
 {
     switch (key)
     {
@@ -303,10 +298,10 @@ void PhagocyteWidget::keyDown(Qt::Key key)
 }
 
 /**
- * @brief PhagocyteWidget::keyUp Updates the widgets WASD key pressed states (released)
+ * @brief PhagocyteLevel::keyUp Updates the widgets WASD key pressed states (released)
  * @param key
  */
-void PhagocyteWidget::keyUp(Qt::Key key)
+void PhagocyteLevel::keyUp(Qt::Key key)
 {
     switch (key)
     {

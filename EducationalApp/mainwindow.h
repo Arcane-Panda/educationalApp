@@ -11,7 +11,7 @@
 
 #include <QMainWindow>
 #include <QEvent>
-#include "PhagocyteWidget.h"
+#include "phagocytelevel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

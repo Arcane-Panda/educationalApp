@@ -25,5 +25,6 @@
         <file>dialogueBox.png</file>
         <file>darkness.png</file>
         <file>Bacteria.png</file>
+        <file>borderwalls.json</file>
     </qresource>
 </RCC>

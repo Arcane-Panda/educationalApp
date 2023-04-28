@@ -423,7 +423,7 @@
        <zorder>dialogueLabelLevel1</zorder>
       </widget>
       <widget class="QWidget" name="Level2">
-       <widget class="PhagocyteWidget" name="MazePhagocyte" native="true">
+       <widget class="PhagocyteLevel" name="MazePhagocyte" native="true">
         <property name="geometry">
          <rect>
           <x>9</x>
@@ -503,7 +503,7 @@
        </widget>
       </widget>
       <widget class="QWidget" name="Level3">
-       <widget class="PhagocyteWidget" name="Level3Phagocyte" native="true">
+       <widget class="PhagocyteLevel" name="Level3Phagocyte" native="true">
         <property name="geometry">
          <rect>
           <x>9</x>
@@ -592,7 +592,7 @@
      <x>0</x>
      <y>0</y>
      <width>1400</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
@@ -600,9 +600,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PhagocyteWidget</class>
+   <class>PhagocyteLevel</class>
    <extends>QWidget</extends>
-   <header>phagocytewidget.h</header>
+   <header>phagocytelevel.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
